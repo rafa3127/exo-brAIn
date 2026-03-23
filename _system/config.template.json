@@ -1,0 +1,25 @@
+{
+  "vault": {
+    "name": "VAULT_NAME",
+    "path": "VAULT_PATH",
+    "github": "GITHUB_USER/REPO_NAME"
+  },
+  "mcp": {
+    "port": 27123,
+    "protocol": "http"
+  },
+  "paths": {
+    "sessions": "_system/sessions",
+    "context": "_system/context",
+    "skillSpecs": "_system/skill-specs",
+    "roles": "_system/roles",
+    "templates": "_system/templates",
+    "config": "_system/config.json"
+  },
+  "areaTypes": ["project", "study", "knowledge", "personal"],
+  "conventions": {
+    "temporalNaming": "YYYY-MM-DD-slug",
+    "audienceTypes": ["ai", "human", "shared"],
+    "docTypes": ["decision", "log", "checklist", "architecture", "instruction", "index", "note"]
+  }
+}
