@@ -1,0 +1,17 @@
+# Obsidian workspace (changes every click)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/trash
+
+# REST API secrets (generated per user on first run)
+.obsidian/plugins/obsidian-local-rest-api/data.json
+
+# Personal vault config (filled during setup)
+_system/config.json
+
+# Session logs are personal
+_system/sessions/
+
+# OS files
+.DS_Store
