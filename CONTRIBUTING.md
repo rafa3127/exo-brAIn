@@ -85,6 +85,19 @@ See any existing skill in `_system/skill-specs/` for reference.
 4. Maintainer reviews the AI assessment and makes the final decision
 5. At least one maintainer approval is required to merge
 
+## Release process
+
+Releases are managed by the maintainer. Contributors do **not** assign version numbers.
+
+1. Contributors add their changes under `[Unreleased]` in `CHANGELOG.md`
+2. On merge, the maintainer decides whether to release immediately or accumulate changes
+3. To release: rename `[Unreleased]` → `[x.y.z] - YYYY-MM-DD`, commit, push, create a GitHub release with a matching tag
+
+**Versioning follows [semver](https://semver.org/):**
+- **Patch** (0.0.x): bug fixes, typos, small corrections
+- **Minor** (0.x.0): new skill-specs, new templates, improvements
+- **Major** (x.0.0): breaking changes to vault structure or `CLAUDE.md` protocol
+
 ## Security
 
 Skill-specs are markdown procedures that AI agents execute with file system access. This means:
