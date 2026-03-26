@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: instruction
-version: 2
-last_updated: 2026-03-23
+version: 3
+last_updated: 2026-03-26
 ---
 
 # exo-brAIn — Interactive Setup
@@ -101,9 +101,11 @@ If not:
 ### Local REST API
 1. Settings → Community Plugins → Browse → search "Local REST API" → Install → Enable
 2. Note the **port** (default: 27123)
-3. Generate an **API key** and save it
+3. Generate an **API key** in the plugin settings
 
-**Ask:** "What port is the REST API running on? Do you have the API key saved?"
+**Ask:** "What port is the REST API running on? Please paste the API key here — I'll need it to configure the MCP connection in Step 5."
+
+> **Important:** Store the API key and port in memory for Step 5. You will need them to configure the MCP bridge.
 
 ---
 
@@ -143,32 +145,56 @@ Write the updated `_system/config.json`.
 
 If yes:
 
-1. Install mcp-obsidian:
-   ```bash
-   pip install mcp-obsidian
-   # or: uv tool install mcp-obsidian
-   ```
+### 5a — Install mcp-obsidian
 
-2. For **Claude Code**, add to MCP settings (`claude mcp add` or edit `~/.claude/mcp_settings.json`):
-   ```json
-   {
-     "mcpServers": {
-       "obsidian": {
-         "command": "uvx",
-         "args": ["mcp-obsidian"],
-         "env": {
-           "OBSIDIAN_API_KEY": "THEIR_KEY",
-           "OBSIDIAN_HOST": "127.0.0.1",
-           "OBSIDIAN_PORT": "27123"
-         }
-       }
-     }
-   }
-   ```
+Run the installation command:
+```bash
+pip install mcp-obsidian
+# or: uv tool install mcp-obsidian
+```
 
-3. For **claude.ai**, connect the MCP server in Settings → Connected apps (if available), or configure via the Claude desktop app config.
+### 5b — Configure the MCP connection
 
-**Note:** If `uvx` is not found by the AI tool, use the absolute path (e.g., `/Users/name/.local/bin/uvx`).
+Use the API key and port obtained from Step 3. **Execute the configuration yourself** — do not just show the user what to do.
+
+**For Claude Code**, run:
+```bash
+claude mcp add obsidian -- uvx mcp-obsidian
+```
+Then set the environment variables. If `claude mcp add` does not support env vars directly, edit `~/.claude/mcp_settings.json` and write:
+```json
+{
+  "mcpServers": {
+    "obsidian": {
+      "command": "uvx",
+      "args": ["mcp-obsidian"],
+      "env": {
+        "OBSIDIAN_API_KEY": "{{API_KEY_FROM_STEP_3}}",
+        "OBSIDIAN_HOST": "127.0.0.1",
+        "OBSIDIAN_PORT": "{{PORT_FROM_STEP_3}}"
+      }
+    }
+  }
+}
+```
+
+**For claude.ai / Claude Desktop**, edit the Claude desktop app config file and add the same `obsidian` server block above.
+
+> **Note:** If `uvx` is not found, locate it with `which uvx` and use the absolute path (e.g., `/Users/name/.local/bin/uvx`).
+
+### 5c — Install the exo-brAIn skill
+
+The vault includes a skill definition at `_system/claude-ai-skill/skill-definition.md`. This skill teaches the AI how to use all the vault's skill-specs.
+
+**If you have access to a skill installation tool** (e.g., `skill-creator` in Claude Code):
+1. Read `_system/claude-ai-skill/skill-definition.md`
+2. Use the skill installation tool to create a skill from that definition
+
+**If no skill installation tool is available:**
+1. Tell the user: "The vault includes a skill definition at `_system/claude-ai-skill/skill-definition.md`. You can install it manually in your AI tool's skill/plugin system."
+2. Explain that without the skill installed, the AI will still work via `CLAUDE.md` instructions, but won't trigger automatically from natural language in other contexts.
+
+**Ask:** "I've configured the MCP connection. Let me verify it works — can you confirm Obsidian is open?"
 
 ---
 
