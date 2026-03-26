@@ -17,34 +17,59 @@ last_updated: 2026-03-23
 
 Before starting, figure out how the user got here:
 
-- **Running in Claude Code inside the vault?** → Steps 1-2 are done. Git works. Start at Step 3.
-- **Talking in claude.ai with MCP connected?** → Steps 1-2 are done, MCP works. Start at Step 3.
+- **Running in Claude Code inside the vault?** → The clone exists and AI tool works, but **you must still run Step 1 checks** (repo ownership + path structure). Then continue from Step 2.
+- **Talking in claude.ai with MCP connected?** → MCP works, but **you must still run Step 1 checks**. Then continue from Step 2.
 - **User pasted this file manually?** → Start from Step 1.
+- **AI is helping from a different directory** (user shared the repo URL or asked to set it up) → Start from Step 1, full flow. Pay special attention to clone target directory.
 - **Not sure?** → Ask: "Have you already cloned this repo and opened it in Obsidian?"
+
+> **IMPORTANT:** Step 1 checks (repo ownership and path structure) are NEVER skipped. A user running you from inside a direct clone of the template still has the wrong remote and possibly a nested folder structure.
 
 ---
 
-## Step 1 — Repository Setup
+## Step 1 — Repository Setup & Verification
 
-> Skip if the user is already running you from inside the vault.
+> **Never fully skip this step.** Even if the vault is already cloned, run the verification checks below.
+
+### If setting up from scratch:
 
 **Ask the user:**
 - "Do you already have this repo cloned, or should we set it up?"
 
-If setting up from scratch:
+If not cloned yet:
 1. They need a GitHub account and Git installed
-2. They should have created a repo from the template (or forked it) at `https://github.com/rafa3127/exo-brAIn`
-3. Clone locally:
+2. **Recommended:** Use the GitHub template — go to `https://github.com/rafa3127/exo-brAIn`, click "Use this template" → "Create a new repository". This gives them their own repo automatically.
+3. Clone **their own repo** (not the template) into the target directory:
    ```bash
-   git clone git@github.com:USER/REPO.git ~/Desktop/VAULT_NAME
+   git clone git@github.com:USER/THEIR_REPO.git ~/Desktop/VAULT_NAME
    ```
-4. If they cloned the original (not a template), change remote:
+   > **Clone target = vault root.** The folder you clone into IS the Obsidian vault. Do NOT clone into a subfolder of the vault. For example, if the vault folder is `~/Desktop/my-brain`, clone directly there — not into `~/Desktop/my-brain/exo-brAIn/`.
+4. If SSH fails (passphrase prompt in non-interactive terminal), use HTTPS:
    ```bash
-   cd ~/Desktop/VAULT_NAME
-   git remote remove origin
-   git remote add origin git@github.com:USER/THEIR_REPO.git
-   git push -u origin main
+   git clone https://github.com/USER/THEIR_REPO.git ~/Desktop/VAULT_NAME
    ```
+
+### Verification checks (always run):
+
+**Check 1 — Repo ownership:**
+Run `git remote -v`. If the origin points to `rafa3127/exo-brAIn`, the user cloned the template directly instead of creating their own repo. Fix this:
+1. Help them create a new repo on GitHub (via API or instruct them manually)
+2. Change remote: `git remote set-url origin git@github.com:USER/THEIR_REPO.git`
+3. Push: `git push -u origin main`
+
+**Check 2 — No nested folders:**
+Verify that `CLAUDE.md` is at the root of the working directory, not inside a subfolder. If the structure looks like:
+```
+vault-folder/exo-brAIn/CLAUDE.md   ← WRONG
+```
+Then move all contents up one level:
+```bash
+mv vault-folder/exo-brAIn/* vault-folder/exo-brAIn/.* vault-folder/ 2>/dev/null
+rmdir vault-folder/exo-brAIn
+```
+
+**Check 3 — Git health:**
+Run `git status`. Confirm clean state and `main` branch.
 
 ---
 

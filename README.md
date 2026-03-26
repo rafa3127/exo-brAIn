@@ -19,22 +19,34 @@ A **template vault** that turns Obsidian into a structured external brain. It wo
 
 ## Quick Start (5 minutes)
 
-### 1. Get the template
+### 1. Create your own repo from the template
+
+> **Do NOT just clone `rafa3127/exo-brAIn` directly.** You need your own repo so your personal notes sync to YOUR GitHub, not the template.
+
+1. Go to [github.com/rafa3127/exo-brAIn](https://github.com/rafa3127/exo-brAIn)
+2. Click **"Use this template"** → **"Create a new repository"**
+3. Name it whatever you want (e.g., `my-brain`, `exo-brain`, `vault`)
+4. Clone **your new repo** into your desired vault folder:
 
 ```bash
-# Option A: Use as GitHub template (recommended)
-# Go to https://github.com/rafa3127/exo-brAIn
-# Click "Use this template" → "Create a new repository"
-# Then clone YOUR copy:
 git clone git@github.com:YOUR_USER/YOUR_REPO.git ~/Desktop/my-brain
+```
 
-# Option B: Direct clone (change remote after)
+> **The clone target IS your vault root.** Obsidian will open this folder directly. Do not clone into a subfolder of an existing folder (e.g., avoid `~/Desktop/my-brain/exo-brAIn/` — that creates unnecessary nesting).
+
+<details>
+<summary>Alternative: direct clone (if you can't use templates)</summary>
+
+```bash
 git clone git@github.com:rafa3127/exo-brAIn.git ~/Desktop/my-brain
 cd ~/Desktop/my-brain
 git remote remove origin
+# Create a new empty repo on GitHub first, then:
 git remote add origin git@github.com:YOUR_USER/YOUR_REPO.git
 git push -u origin main
 ```
+
+</details>
 
 ### 2. Open in Obsidian
 
@@ -115,7 +127,7 @@ Obsidian Git auto-syncs to GitHub
 ### Key concepts
 
 | Concept | What it is |
-|---------|-----------|
+|---------|------------|
 | **Roles** | AI personas with specific expertise. Iterable — grow over time. |
 | **Areas** | Structured folders for projects, study, knowledge, or personal topics. |
 | **Skill-specs** | Markdown procedures the AI follows. Portable across tools. |
