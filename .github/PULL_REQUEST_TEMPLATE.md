@@ -20,6 +20,7 @@
 - [ ] No hardcoded personal values in templates (used `{{placeholders}}`)
 - [ ] Skill-spec has required sections (`Purpose`, `When to use`, `Procedure`)
 - [ ] Content is AI-portable (not specific to one AI provider)
+- [ ] `CHANGELOG.md` updated with changes under `[Unreleased]`
 - [ ] Self-reviewed with `review-contribution` skill (or tested manually with an AI agent)
 
 ## Testing
