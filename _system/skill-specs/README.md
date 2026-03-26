@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: index
-version: 1
-last_updated: 2026-03-23
+version: 2
+last_updated: 2026-03-25
 ---
 
 # Skill Specs
@@ -14,7 +14,7 @@ These are **specifications**, not code. Any AI with access to the vault can read
 ## Available Skills
 
 | Skill | File | Direction | Purpose |
-|-------|------|-----------|---------|
+|-------|------|-----------|----------|
 | role-load | `role-load.md` | Read | List available roles or load one by alias |
 | role-save | `role-save.md` | Write | Create, edit, or iterate on roles |
 | area-create | `area-create.md` | Write | Create a knowledge area from template |
@@ -22,6 +22,7 @@ These are **specifications**, not code. Any AI with access to the vault can read
 | load-context | `load-context.md` | Read | Load a file on demand during session |
 | update-doc | `update-doc.md` | Write | Update documentation by type |
 | session-end | `session-end.md` | Write | End session: log progress + update indexes |
+| review-contribution | `review-contribution.md` | Read | Review a PR against vault conventions and security |
 
 ## How to Use
 
