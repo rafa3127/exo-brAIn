@@ -55,8 +55,9 @@ All `.md` files require frontmatter. Required fields depend on file type:
    - `docs/description` — documentation only
    - `improve/description` — improvements to existing skills
 3. **Make your changes** following the conventions above
-4. **Self-review** — ask any AI agent to run the `review-contribution` skill (`_system/skill-specs/review-contribution.md`) on your changes
-5. **Open a Pull Request** using the provided template
+4. **Update `CHANGELOG.md`** — add your changes under an `[Unreleased]` section at the top. The maintainer assigns the version number on release
+5. **Self-review** — ask any AI agent to run the `review-contribution` skill (`_system/skill-specs/review-contribution.md`) on your changes
+6. **Open a Pull Request** using the provided template
 
 ## Skill-spec structure
 
@@ -83,6 +84,19 @@ See any existing skill in `_system/skill-specs/` for reference.
 3. Convention checks validate frontmatter, naming, dependencies, and content quality
 4. Maintainer reviews the AI assessment and makes the final decision
 5. At least one maintainer approval is required to merge
+
+## Release process
+
+Releases are managed by the maintainer. Contributors do **not** assign version numbers.
+
+1. Contributors add their changes under `[Unreleased]` in `CHANGELOG.md`
+2. On merge, the maintainer decides whether to release immediately or accumulate changes
+3. To release: rename `[Unreleased]` → `[x.y.z] - YYYY-MM-DD`, commit, push, create a GitHub release with a matching tag
+
+**Versioning follows [semver](https://semver.org/):**
+- **Patch** (0.0.x): bug fixes, typos, small corrections
+- **Minor** (0.x.0): new skill-specs, new templates, improvements
+- **Major** (x.0.0): breaking changes to vault structure or `CLAUDE.md` protocol
 
 ## Security
 
