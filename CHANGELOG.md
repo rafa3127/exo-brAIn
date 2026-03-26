@@ -4,6 +4,11 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- CHANGELOG update is now a required step in contribution process (CONTRIBUTING.md, PR template, review-contribution skill)
+
 ## [0.2.0] - 2026-03-25
 
 ### Added

@@ -1,8 +1,8 @@
 ---
 skill: review-contribution
 audience: ai
-version: 1
-last_updated: 2026-03-25
+version: 2
+last_updated: 2026-03-26
 depends_on: []
 ---
 
@@ -100,7 +100,14 @@ For area templates only (`_system/templates/*.md`):
 4. Skill-specs must contain at minimum: `## Purpose`, `## When to use`, `## Procedure` sections
 5. Content must be AI-portable — no references to a specific AI provider as a requirement (mentioning as example is fine)
 
-### Step 8: Generate review
+### Step 8: CHANGELOG check
+
+1. Verify that `CHANGELOG.md` is included in the PR's changed files
+2. Changes must appear under an `[Unreleased]` section at the top of the file
+3. Entries should follow [Keep a Changelog](https://keepachangelog.com/) categories: `Added`, `Changed`, `Fixed`, `Removed`
+4. If CHANGELOG is missing from the PR → flag as **blocking** issue
+
+### Step 9: Generate review
 
 Produce a structured review report:
 

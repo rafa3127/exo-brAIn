@@ -55,8 +55,9 @@ All `.md` files require frontmatter. Required fields depend on file type:
    - `docs/description` — documentation only
    - `improve/description` — improvements to existing skills
 3. **Make your changes** following the conventions above
-4. **Self-review** — ask any AI agent to run the `review-contribution` skill (`_system/skill-specs/review-contribution.md`) on your changes
-5. **Open a Pull Request** using the provided template
+4. **Update `CHANGELOG.md`** — add your changes under an `[Unreleased]` section at the top. The maintainer assigns the version number on release
+5. **Self-review** — ask any AI agent to run the `review-contribution` skill (`_system/skill-specs/review-contribution.md`) on your changes
+6. **Open a Pull Request** using the provided template
 
 ## Skill-spec structure
 
