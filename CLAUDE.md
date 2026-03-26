@@ -61,6 +61,7 @@ Read the spec BEFORE performing the operation. Follow the documented procedure.
 | Create area | `_system/skill-specs/area-create.md` |
 | Load file on demand | `_system/skill-specs/load-context.md` |
 | Update documentation | `_system/skill-specs/update-doc.md` |
+| Review contribution PR | `_system/skill-specs/review-contribution.md` |
 | Full skill index | `_system/skill-specs/README.md` |
 
 ## Conventions
