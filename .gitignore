@@ -7,6 +7,9 @@
 # REST API secrets (generated per user on first run)
 .obsidian/plugins/obsidian-local-rest-api/data.json
 
+# Git plugin credentials (contains local paths)
+.obsidian/plugins/obsidian-git/.git_credentials_input
+
 # Personal vault config (filled during setup)
 _system/config.json
 
