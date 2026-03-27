@@ -1,8 +1,8 @@
 ---
 audience: human
 doc_type: instruction
-version: 1
-last_updated: 2026-03-23
+version: 2
+last_updated: 2026-03-27
 ---
 
 # exo-brAIn 🧠
@@ -133,6 +133,9 @@ Obsidian Git auto-syncs to GitHub
 | **Skill-specs** | Markdown procedures the AI follows. Portable across tools. |
 | **Sessions** | Work periods with automatic logging and context tracking. |
 | **Cross-cutting** | Knowledge areas available for consultation from other areas. |
+| **Captures** | Quick daily notes — append-only, one file per day. |
+| **Backlog** | Raw ideas saved for future refinement or promotion to tasks. |
+| **Tasks** | Defined, actionable work items linked to knowledge areas. |
 
 ### Vault structure
 
@@ -142,10 +145,13 @@ vault/
 ├── _system/
 │   ├── config.json            ← your vault settings (gitignored)
 │   ├── quickstart.md          ← interactive AI-guided setup
-│   ├── skill-specs/           ← all AI procedures (7 skills)
+│   ├── skill-specs/           ← all AI procedures (13 skills)
 │   ├── roles/                 ← your AI personas
 │   ├── templates/             ← area creation templates
 │   └── sessions/              ← session logs (gitignored)
+├── _captures/                 ← daily notes (append-only, one file per day)
+├── _backlog/                  ← ideas for future refinement
+├── _tasks/                    ← defined tasks linked to areas
 └── [your knowledge areas]/    ← created via AI skill
 ```
 
@@ -160,6 +166,12 @@ vault/
 | `area-create` | Create a new knowledge area from template |
 | `load-context` | Load files on demand during a session |
 | `update-doc` | Update documentation by type (decisions, logs, etc.) |
+| `review-contribution` | Review a PR against vault conventions and security |
+| `daily-capture` | Quick append of ideas/notes to today's capture file |
+| `backlog-add` | Add an idea to the backlog for future refinement |
+| `backlog-review` | List and triage backlog items |
+| `task-define` | Convert a backlog item or idea into a defined task |
+| `task-list` | List pending tasks, daily briefing with calendar |
 
 ---
 
