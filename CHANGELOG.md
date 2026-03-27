@@ -4,7 +4,7 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.3.1] - 2026-03-27
 
 ### Fixed
 - Added wikilink convention to `CLAUDE.md` Conventions section and `update-doc` skill-spec (v3)
