@@ -1,7 +1,7 @@
 ---
 skill: update-doc
 audience: ai
-version: 2
+version: 3
 last_updated: 2026-03-26
 ---
 
@@ -98,6 +98,17 @@ Unrecognized `doc_type`:
 - Treat as `note` (generic append)
 - Inform user: "This document type doesn't have a specific pattern — used generic append"
 - Never fail
+
+## Cross-referencing
+
+When generating or updating user content (tasks, backlog items, captures, area docs), use Obsidian `[[wikilinks]]` in the **document body** to link related files:
+- Tasks → `[[knowledge/typescript]]`, `[[_backlog/idea-slug]]`
+- Backlog items → `[[_captures/2026-03-26]]`
+- Captures → `[[_backlog/idea-slug]]` when promoting to backlog
+
+**Frontmatter values remain plain strings** (e.g., `area: knowledge/typescript`, not `area: [[knowledge/typescript]]`). Wikilinks are for human navigation in Obsidian; frontmatter is for programmatic access.
+
+**Skill-specs never use wikilinks** — they reference files by path for portability.
 
 ## Notes
 
