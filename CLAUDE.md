@@ -77,3 +77,4 @@ Read the spec BEFORE performing the operation. Follow the documented procedure.
 - Frontmatter `doc_type`: determines update pattern (see `update-doc` spec)
 - `_index.md` files are auto-generated — never edit manually
 - Knowledge areas are created only via the `area-create` spec
+- Cross-references in user content body: use Obsidian `[[wikilinks]]` (e.g., `[[knowledge/typescript]]`, `[[_captures/2026-03-26]]`). Frontmatter values remain plain strings.

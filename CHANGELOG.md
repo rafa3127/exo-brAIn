@@ -4,6 +4,12 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- Added wikilink convention to `CLAUDE.md` Conventions section and `update-doc` skill-spec (v3)
+- User-generated content now explicitly uses `[[wikilinks]]` for cross-references; frontmatter stays plain strings; skill-specs stay portable (no wikilinks)
+
 ## [0.3.0] - 2026-03-26
 
 ### Added
