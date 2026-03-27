@@ -1,7 +1,7 @@
 ---
 skill: review-contribution
 audience: ai
-version: 2
+version: 3
 last_updated: 2026-03-26
 depends_on: []
 ---
@@ -99,6 +99,7 @@ For area templates only (`_system/templates/*.md`):
 3. `audience: shared` files → should balance both; flag extremes
 4. Skill-specs must contain at minimum: `## Purpose`, `## When to use`, `## Procedure` sections
 5. Content must be AI-portable — no references to a specific AI provider as a requirement (mentioning as example is fine)
+6. Examples in skill-specs, templates, and docs must be **100% generic** — never reference real personal projects, client names, proprietary tools, or user-specific knowledge. Use invented placeholder names (e.g., "Client Portal", "ML Pipeline", "Budget Tracker")
 
 ### Step 8: CHANGELOG check
 

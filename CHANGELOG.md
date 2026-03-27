@@ -4,6 +4,15 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.3] - 2026-03-26
+
+### Fixed
+- Replaced personal project references in skill-spec examples with generic placeholders
+- Added `.git_credentials_input` to `.gitignore` (contained local system paths)
+
+### Changed
+- `review-contribution` skill now requires all examples to be 100% generic — no real project names, client names, or user-specific knowledge
+
 ## [0.2.2] - 2026-03-26
 
 ### Fixed
