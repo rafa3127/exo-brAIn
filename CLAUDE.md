@@ -62,6 +62,11 @@ Read the spec BEFORE performing the operation. Follow the documented procedure.
 | Load file on demand | `_system/skill-specs/load-context.md` |
 | Update documentation | `_system/skill-specs/update-doc.md` |
 | Review contribution PR | `_system/skill-specs/review-contribution.md` |
+| Quick capture | `_system/skill-specs/daily-capture.md` |
+| Add to backlog | `_system/skill-specs/backlog-add.md` |
+| Review backlog | `_system/skill-specs/backlog-review.md` |
+| Define a task | `_system/skill-specs/task-define.md` |
+| List tasks / daily briefing | `_system/skill-specs/task-list.md` |
 | Full skill index | `_system/skill-specs/README.md` |
 
 ## Conventions

@@ -4,6 +4,21 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.0] - 2026-03-26
+
+### Added
+- Productivity system: captures, backlog, and tasks pipeline
+- `daily-capture` skill-spec — quick append of ideas/notes to daily capture file
+- `backlog-add` skill-spec — add ideas to backlog for future refinement
+- `backlog-review` skill-spec — list and triage backlog items
+- `task-define` skill-spec — convert backlog items into defined, actionable tasks
+- `task-list` skill-spec — list pending tasks and combined daily briefing with calendar
+- `_captures/` directory for daily notes (append-only, one file per day)
+- `_backlog/` directory with `_index.md` for idea tracking
+- `_tasks/` directory with split indexes: `_index-pending.md` and `_index-done.md`
+- New `doc_type` values: `backlog-item`, `task`
+- New paths in `config.json`: `captures`, `backlog`, `tasks`
+
 ## [0.2.3] - 2026-03-26
 
 ### Fixed

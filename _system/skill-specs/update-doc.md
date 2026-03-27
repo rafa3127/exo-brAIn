@@ -1,8 +1,8 @@
 ---
 skill: update-doc
 audience: ai
-version: 1
-last_updated: 2026-03-23
+version: 2
+last_updated: 2026-03-26
 ---
 
 # Skill: update-doc
@@ -69,6 +69,17 @@ area: [area path]
 ### `index`
 - **Pattern**: Auto-regenerate entirely from directory contents
 - **Never** edit `_index.md` manually — always regenerate
+
+### `backlog-item`
+- **Pattern**: Replace content + update status in frontmatter
+- **Status values**: `raw` → `exploring` → `defined` → `discarded`
+- **On define**: add `promoted_to: _tasks/YYYY-MM-DD-slug` to frontmatter
+- **On discard**: add `discarded_reason` line
+
+### `task`
+- **Pattern**: Append to work log + update status in frontmatter
+- **Status values**: `pending` → `in-progress` → `done` / `cancelled`
+- **On complete**: set `status: done`, add `completed: YYYY-MM-DD`, move entry from `_tasks/_index-pending.md` to `_tasks/_index-done.md`
 
 ### `note`
 - **Pattern**: Flexible — append, edit, or replace as needed

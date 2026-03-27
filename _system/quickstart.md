@@ -1,7 +1,7 @@
 ---
 audience: shared
 doc_type: instruction
-version: 3
+version: 4
 last_updated: 2026-03-26
 ---
 
@@ -123,6 +123,23 @@ Read `_system/config.json` and help the user fill in real values:
   "mcp": {
     "port": 27123,
     "protocol": "http"
+  },
+  "paths": {
+    "sessions": "_system/sessions",
+    "context": "_system/context",
+    "skillSpecs": "_system/skill-specs",
+    "roles": "_system/roles",
+    "templates": "_system/templates",
+    "config": "_system/config.json",
+    "captures": "_captures",
+    "backlog": "_backlog",
+    "tasks": "_tasks"
+  },
+  "areaTypes": ["project", "study", "knowledge", "personal"],
+  "conventions": {
+    "temporalNaming": "YYYY-MM-DD-slug",
+    "audienceTypes": ["ai", "human", "shared"],
+    "docTypes": ["decision", "log", "checklist", "architecture", "instruction", "index", "note", "backlog-item", "task"]
   }
 }
 ```

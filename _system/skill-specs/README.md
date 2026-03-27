@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: index
-version: 2
-last_updated: 2026-03-25
+version: 3
+last_updated: 2026-03-26
 ---
 
 # Skill Specs
@@ -23,6 +23,11 @@ These are **specifications**, not code. Any AI with access to the vault can read
 | update-doc | `update-doc.md` | Write | Update documentation by type |
 | session-end | `session-end.md` | Write | End session: log progress + update indexes |
 | review-contribution | `review-contribution.md` | Read | Review a PR against vault conventions and security |
+| daily-capture | `daily-capture.md` | Write | Quickly append ideas/notes to today's capture file |
+| backlog-add | `backlog-add.md` | Write | Add an idea to the backlog for future refinement |
+| backlog-review | `backlog-review.md` | Read | List and triage backlog items |
+| task-define | `task-define.md` | Write | Convert a backlog item or idea into a defined task |
+| task-list | `task-list.md` | Read | List pending tasks, daily briefing with calendar |
 
 ## How to Use
 
