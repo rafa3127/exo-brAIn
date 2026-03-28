@@ -52,21 +52,37 @@ Run `git status` to confirm the repo is clean and on the `main` branch. If there
 
 Read the spec BEFORE performing the operation. Follow the documented procedure.
 
+### Installed skills (Claude Desktop)
+
+When installed via `_system/skill-specs/install-skills.md`, these grouped skills become available as `/slash-commands`:
+
+| Installed skill | Includes | Specs |
+|---|---|---|
+| `exo-brain` | Router, setup, maintenance | `quickstart.md`, `install-skills.md`, `review-contribution.md`, `README.md` |
+| `exo-brain-sessions` | Session lifecycle | `session-boot.md`, `session-end.md`, `load-context.md` |
+| `exo-brain-roles` | Persona management | `role-load.md`, `role-save.md` |
+| `exo-brain-knowledge` | Areas and documentation | `area-create.md`, `update-doc.md` |
+| `exo-brain-tasks` | Tasks and backlog | `task-define.md`, `task-list.md`, `backlog-add.md`, `backlog-review.md` |
+| `exo-brain-capture` | Quick daily notes | `daily-capture.md` |
+
+### Individual spec reference
+
 | Need | Read |
 |------|------|
 | Start session | `_system/skill-specs/session-boot.md` |
 | End session | `_system/skill-specs/session-end.md` |
+| Load file on demand | `_system/skill-specs/load-context.md` |
 | List/load role | `_system/skill-specs/role-load.md` |
 | Create/edit role | `_system/skill-specs/role-save.md` |
 | Create area | `_system/skill-specs/area-create.md` |
-| Load file on demand | `_system/skill-specs/load-context.md` |
 | Update documentation | `_system/skill-specs/update-doc.md` |
 | Review contribution PR | `_system/skill-specs/review-contribution.md` |
-| Quick capture | `_system/skill-specs/daily-capture.md` |
-| Add to backlog | `_system/skill-specs/backlog-add.md` |
-| Review backlog | `_system/skill-specs/backlog-review.md` |
 | Define a task | `_system/skill-specs/task-define.md` |
 | List tasks / daily briefing | `_system/skill-specs/task-list.md` |
+| Add to backlog | `_system/skill-specs/backlog-add.md` |
+| Review backlog | `_system/skill-specs/backlog-review.md` |
+| Quick capture | `_system/skill-specs/daily-capture.md` |
+| Install/update skills | `_system/skill-specs/install-skills.md` |
 | Full skill index | `_system/skill-specs/README.md` |
 
 ## Conventions

@@ -4,6 +4,18 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.0] - 2026-03-28
+
+### Added
+- `install-skills.md` skill-spec — automated installer that generates 6 grouped SKILL.md files with embedded spec content for Claude Desktop/Code/Cowork
+
+### Changed
+- Skill grouping: moved `review-contribution` from `exo-brain-knowledge` to `exo-brain` (meta/maintenance group)
+- Quickstart Step 5 rewritten: correct MCP config paths, separate instructions for Code CLI vs Desktop, new Step 5c points to automated installer
+- `claude-ai-skill/README.md` rewritten to point to automated installer instead of removed manual upload flow
+- `CLAUDE.md` now includes grouped skills table and `install-skills` in spec reference
+- `README.md` (skill-specs index) now includes grouped skills table
+
 ## [0.3.1] - 2026-03-27
 
 ### Fixed

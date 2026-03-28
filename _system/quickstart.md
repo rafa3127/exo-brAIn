@@ -154,7 +154,7 @@ Write the updated `_system/config.json`.
 
 ---
 
-## Step 5 — Connect MCP (optional but recommended)
+## Step 5 — Connect MCP & Install Skills
 
 > MCP enables search and write operations. Without it, the AI can still read files directly (in Claude Code) but loses search and write-back capabilities.
 
@@ -164,21 +164,21 @@ If yes:
 
 ### 5a — Install mcp-obsidian
 
-Run the installation command:
 ```bash
-pip install mcp-obsidian
-# or: uv tool install mcp-obsidian
+uv tool install mcp-obsidian
+```
+
+Locate the binary path for the next step:
+```bash
+which uvx
 ```
 
 ### 5b — Configure the MCP connection
 
 Use the API key and port obtained from Step 3. **Execute the configuration yourself** — do not just show the user what to do.
 
-**For Claude Code**, run:
-```bash
-claude mcp add obsidian -- uvx mcp-obsidian
-```
-Then set the environment variables. If `claude mcp add` does not support env vars directly, edit `~/.claude/mcp_settings.json` and write:
+**For Claude Code CLI**, add the MCP server to `~/.claude/settings.json` under the `mcpServers` key:
+
 ```json
 {
   "mcpServers": {
@@ -195,21 +195,29 @@ Then set the environment variables. If `claude mcp add` does not support env var
 }
 ```
 
-**For claude.ai / Claude Desktop**, edit the Claude desktop app config file and add the same `obsidian` server block above.
+> If `uvx` is not found at runtime, use the absolute path from `which uvx` (e.g., `/Users/name/.local/bin/uvx`).
 
-> **Note:** If `uvx` is not found, locate it with `which uvx` and use the absolute path (e.g., `/Users/name/.local/bin/uvx`).
+**For Claude Desktop / Cowork**, add the same server block to the Claude desktop config file at `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) under `mcpServers`.
 
-### 5c — Install the exo-brAIn skill
+> **Note:** Claude Code CLI and Claude Desktop use **separate config files**. To have the MCP available in both, add it to both files.
 
-The vault includes a skill definition at `_system/claude-ai-skill/skill-definition.md`. This skill teaches the AI how to use all the vault's skill-specs.
+### 5c — Install the exo-brAIn skills
 
-**If you have access to a skill installation tool** (e.g., `skill-creator` in Claude Code):
-1. Read `_system/claude-ai-skill/skill-definition.md`
-2. Use the skill installation tool to create a skill from that definition
+The vault includes an automated skill installer at `_system/skill-specs/install-skills.md`. This installs 6 skills that make vault operations available via `/slash-commands` across Claude Code, Desktop Chat, and Cowork.
 
-**If no skill installation tool is available:**
-1. Tell the user: "The vault includes a skill definition at `_system/claude-ai-skill/skill-definition.md`. You can install it manually in your AI tool's skill/plugin system."
-2. Explain that without the skill installed, the AI will still work via `CLAUDE.md` instructions, but won't trigger automatically from natural language in other contexts.
+**Procedure:**
+1. Read `_system/skill-specs/install-skills.md`
+2. Follow it step by step — it will detect the platform, read the skill-specs from the vault, and install them to the correct location
+
+The installed skills are:
+- `exo-brain` — main router and quickstart
+- `exo-brain-sessions` — start/end sessions, load context
+- `exo-brain-roles` — list, load, create, edit roles
+- `exo-brain-knowledge` — areas and documentation
+- `exo-brain-tasks` — tasks, backlog, daily briefings
+- `exo-brain-capture` — quick daily notes
+
+Without skills installed, the AI still works via `CLAUDE.md` when inside the vault directory, but won't trigger from natural language in other contexts.
 
 **Ask:** "I've configured the MCP connection. Let me verify it works — can you confirm Obsidian is open?"
 
