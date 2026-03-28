@@ -7,9 +7,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [0.4.1] - 2026-03-28
 
 ### Changed
-- `install-skills.md` v4: dual-target installation — skills now install to both Claude Code (`~/.claude/skills/`) and Claude Desktop plugin (`anthropic-skills`) for Chat and Cowork support
-- Added Step 5 for locating the Desktop plugin directory, writing SKILL.md files, and updating `manifest.json`
-- Added uninstall appendix with cleanup instructions for both targets
+- `install-skills.md` v5: dual-target installation with two Desktop methods — Option A packages `.skill` files via `present_files` (preferred, works reliably in Cowork), Option B writes directly to plugin directory (fallback)
+- Skills now install to both Claude Code (`~/.claude/skills/`) and Claude Desktop (Chat + Cowork) in a single run
+- Added uninstall appendix with cleanup instructions for both methods
 
 ## [0.4.0] - 2026-03-28
 
