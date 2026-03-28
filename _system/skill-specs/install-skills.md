@@ -1,7 +1,7 @@
 ---
 audience: ai
 doc_type: instruction
-version: 4
+version: 5
 last_updated: 2026-03-28
 ---
 
@@ -11,9 +11,9 @@ Installs the exo-brAIn skill suite into the user's AI platform. Skills are embed
 
 Skills are installed to **two targets** on Claude platforms:
 - **Claude Code** (`~/.claude/skills/`) — for Code mode (CLI and Desktop Code tab)
-- **Claude Desktop plugin** (`anthropic-skills`) — for Chat and Cowork modes
+- **Claude Desktop** (`.skill` packages or plugin directory) — for Chat and Cowork modes
 
-Both targets use the same SKILL.md files but different registration mechanisms.
+Both targets use the same SKILL.md files but different registration mechanisms. The preferred Desktop method is `.skill` file packaging (available in Cowork), with direct plugin directory writing as fallback.
 
 > **Read this full spec before executing any step.**
 > **Re-run this installer after updating any skill-spec in the vault** to sync changes.
@@ -248,12 +248,54 @@ description: >
 
 ---
 
-## Step 5 — Install to Claude Desktop Plugin (Chat + Cowork)
+## Step 5 — Install to Claude Desktop (Chat + Cowork)
 
 > This step makes skills available as `/slash-commands` in **Claude Desktop Chat** and **Cowork** modes.
 > If the user is only using Claude Code CLI (no Desktop app), skip this step.
 
-### 5a — Locate the anthropic-skills plugin
+**Choose the method based on available tools — try Option A first, fall back to Option B.**
+
+### Option A — Package as `.skill` files (preferred)
+
+**Detection:** You have access to `present_files` (Cowork) or `package_skill` (skill-creator).
+
+This is the most reliable method. It packages each skill as a `.skill` file that the user installs with one click.
+
+**Procedure:**
+
+1. For each of the 6 skills, create a temporary directory with the SKILL.md:
+   ```bash
+   mkdir -p /tmp/exo-brain-skills/exo-brain
+   # Copy the SKILL.md content generated in Step 4
+   # Repeat for all 6 skills
+   ```
+
+2. Package each skill directory as a `.skill` file (which is a zip archive):
+   ```bash
+   cd /tmp/exo-brain-skills/exo-brain && zip -r /tmp/exo-brain.skill . -x "*.DS_Store"
+   cd /tmp/exo-brain-skills/exo-brain-sessions && zip -r /tmp/exo-brain-sessions.skill . -x "*.DS_Store"
+   cd /tmp/exo-brain-skills/exo-brain-roles && zip -r /tmp/exo-brain-roles.skill . -x "*.DS_Store"
+   cd /tmp/exo-brain-skills/exo-brain-knowledge && zip -r /tmp/exo-brain-knowledge.skill . -x "*.DS_Store"
+   cd /tmp/exo-brain-skills/exo-brain-tasks && zip -r /tmp/exo-brain-tasks.skill . -x "*.DS_Store"
+   cd /tmp/exo-brain-skills/exo-brain-capture && zip -r /tmp/exo-brain-capture.skill . -x "*.DS_Store"
+   ```
+
+3. Copy the `.skill` files to the outputs folder and present them to the user:
+   ```bash
+   cp /tmp/exo-brain*.skill {{OUTPUTS_FOLDER}}/
+   ```
+
+4. Use `present_files` to show each `.skill` file to the user. Each file renders with a **"Copy to your skills"** button that the user clicks to install.
+
+5. Tell the user: "Click 'Copy to your skills' on each file to install. After installing all 6, restart Claude Desktop for the skills to appear as `/slash-commands`."
+
+### Option B — Write directly to plugin directory (fallback)
+
+**Detection:** Option A is not available (no `present_files`, not in Cowork, no skill-creator).
+
+This method writes skills directly into the Claude Desktop internal plugin directory. It works but may be reset by Claude Desktop updates.
+
+#### 5b.1 — Locate the anthropic-skills plugin
 
 The Claude Desktop plugin system stores plugins at:
 
@@ -288,19 +330,14 @@ skills-plugin/
 find ~/Library/Application\ Support/Claude/local-agent-mode-sessions/skills-plugin -name "manifest.json" -maxdepth 4 2>/dev/null
 ```
 
-```bash
-# Windows (via PowerShell)
-Get-ChildItem -Path "$env:APPDATA\Claude\local-agent-mode-sessions\skills-plugin" -Filter "manifest.json" -Recurse -Depth 4
-```
-
 Store the directory containing `manifest.json` as `PLUGIN_ROOT`.
 
-**If not found:** The user may not have Claude Desktop installed, or it hasn't initialized the plugin system yet. Ask:
-> "I can't find the Claude Desktop plugin directory. Is Claude Desktop installed? Have you opened it at least once? If not, we can skip this step and install only for Claude Code."
+**If not found:** Tell the user:
+> "I can't find the Claude Desktop plugin directory. Skills were installed for Claude Code only. To install for Desktop/Cowork, re-run this installer from Cowork mode where the `.skill` packaging method is available."
 
-### 5b — Write SKILL.md files to the plugin
+#### 5b.2 — Write SKILL.md files to the plugin
 
-For each of the 6 skills, create the directory and copy the **exact same SKILL.md** already generated in Step 4:
+For each of the 6 skills, create the directory and write the **exact same SKILL.md** generated in Step 4:
 
 ```bash
 PLUGIN_SKILLS="{{PLUGIN_ROOT}}/skills"
@@ -312,15 +349,11 @@ mkdir -p "$PLUGIN_SKILLS/exo-brain-tasks"
 mkdir -p "$PLUGIN_SKILLS/exo-brain-capture"
 ```
 
-Write the same SKILL.md content to each directory. The files are identical to those in `~/.claude/skills/`.
+Write the same SKILL.md content to each directory.
 
-### 5c — Update manifest.json
+#### 5b.3 — Update manifest.json
 
-Read the existing `{{PLUGIN_ROOT}}/manifest.json`. This file contains a JSON object with:
-- `lastUpdated`: timestamp in milliseconds
-- `skills`: array of skill entries
-
-**For each of the 6 exo-brAIn skills**, add or update an entry in the `skills` array:
+Read the existing `{{PLUGIN_ROOT}}/manifest.json`. For each of the 6 exo-brAIn skills, add or update an entry in the `skills` array:
 
 ```json
 {
@@ -328,27 +361,15 @@ Read the existing `{{PLUGIN_ROOT}}/manifest.json`. This file contains a JSON obj
   "name": "exo-brain",
   "description": "[same description from the SKILL.md frontmatter]",
   "creatorType": "user",
-  "updatedAt": "[current ISO 8601 timestamp, e.g. 2026-03-28T15:00:00.000Z]",
+  "updatedAt": "[current ISO 8601 timestamp]",
   "enabled": true
 }
 ```
 
-The 6 entries to add/update:
-
-| skillId | name | description source |
-|---|---|---|
-| `exo-brain` | `exo-brain` | From 4.1 frontmatter |
-| `exo-brain-sessions` | `exo-brain-sessions` | From 4.2 frontmatter |
-| `exo-brain-roles` | `exo-brain-roles` | From 4.3 frontmatter |
-| `exo-brain-knowledge` | `exo-brain-knowledge` | From 4.4 frontmatter |
-| `exo-brain-tasks` | `exo-brain-tasks` | From 4.5 frontmatter |
-| `exo-brain-capture` | `exo-brain-capture` | From 4.6 frontmatter |
-
 **Important rules:**
-- **Preserve all existing skills** in the manifest (Anthropic-managed and other user skills). Only add/update exo-brAIn entries.
-- If an exo-brAIn skill already exists in the array (from a previous install), **replace it** rather than duplicating.
+- **Preserve all existing skills** in the manifest. Only add/update exo-brAIn entries.
+- If an exo-brAIn skill already exists, **replace it** rather than duplicating.
 - Update `lastUpdated` at the root level to the current timestamp in milliseconds.
-- Write the full updated JSON back to `manifest.json`.
 
 ---
 
@@ -367,6 +388,10 @@ wc -l ~/.claude/skills/exo-brain-sessions/SKILL.md
 Should be significantly more than 20 lines (the embedded specs add substantial content).
 
 ### Claude Desktop verification (if Step 5 was executed)
+
+**If Option A was used:** Ask the user to confirm they clicked "Copy to your skills" on all 6 files and restarted Claude Desktop. Then verify by typing `/exo-brain` in a new conversation — it should appear as an autocomplete option.
+
+**If Option B was used:**
 ```bash
 ls "{{PLUGIN_ROOT}}/skills/" | grep exo-brain
 ```
@@ -390,9 +415,9 @@ Claude Code (CLI + Desktop Code tab):
 🧩 6 skills installed
 
 Claude Desktop (Chat + Cowork):
-📂 {{PLUGIN_ROOT}}/skills/
-📋 manifest.json updated with 6 entries
-🧩 6 skills available as /slash-commands
+🧩 6 .skill files presented for installation (Option A)
+   — or —
+📂 {{PLUGIN_ROOT}}/skills/ (Option B)
 
 Skills: exo-brain, exo-brain-sessions, exo-brain-roles,
   exo-brain-knowledge, exo-brain-tasks, exo-brain-capture
@@ -407,7 +432,8 @@ If Step 5 was skipped:
 🧩 6 skills: exo-brain, exo-brain-sessions, exo-brain-roles,
    exo-brain-knowledge, exo-brain-tasks, exo-brain-capture
 ⚡ Specs embedded — no vault roundtrip needed at runtime
-ℹ️ Claude Desktop plugin not found — skills available in Code mode only
+ℹ️ Claude Desktop not detected — skills available in Code mode only.
+   To install for Desktop/Cowork, re-run this installer from Cowork.
 🔄 To update after spec changes: re-run this installer
 ```
 
@@ -427,13 +453,16 @@ This can also be triggered from the quickstart flow (Step 5c) during initial set
 
 To remove exo-brAIn skills from all targets:
 
-1. Delete skill directories from Claude Code:
-   ```bash
-   rm -rf ~/.claude/skills/exo-brain*
-   ```
-2. Delete skill directories from Claude Desktop plugin:
-   ```bash
-   rm -rf "{{PLUGIN_ROOT}}/skills/exo-brain"*
-   ```
-3. Remove the 6 exo-brAIn entries from `{{PLUGIN_ROOT}}/manifest.json` (preserve other skills)
-4. Update `lastUpdated` in manifest
+**Claude Code:**
+```bash
+rm -rf ~/.claude/skills/exo-brain*
+```
+
+**Claude Desktop (if installed via Option A — .skill files):**
+Open Claude Desktop → Settings → Skills → Remove each `exo-brain-*` skill.
+
+**Claude Desktop (if installed via Option B — plugin directory):**
+```bash
+rm -rf "{{PLUGIN_ROOT}}/skills/exo-brain"*
+```
+Then remove the 6 exo-brAIn entries from `{{PLUGIN_ROOT}}/manifest.json` (preserve other skills) and update `lastUpdated`.
