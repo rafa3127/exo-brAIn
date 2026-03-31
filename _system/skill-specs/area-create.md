@@ -55,8 +55,8 @@ Before creating an area, apply these checks in order:
 
 If the content only makes sense within one project (e.g., a client's business processes, a specific company's operational context, a project's internal architecture), it is NOT `knowledge/` — it belongs as a sub-area or document within that project's folder.
 
-**Wrong:** `knowledge/clinic-operations` (specific to one client)
-**Right:** `work/neurohealth/clinic-operations` (sub-area within the project)
+**Wrong:** `knowledge/acme-operations` (specific to one client)
+**Right:** `work/acme-corp/operations` (sub-area within the project)
 
 **Test:** "Would this be useful to someone who has never heard of [project]?" If no → it's project-specific, not knowledge.
 
