@@ -1,8 +1,8 @@
 ---
 skill: task-list
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-03-31
 depends_on: [task-define]
 ---
 
@@ -63,7 +63,7 @@ If user wants to work on a task:
 1. Read the full task file
 2. Load its `context_files` if specified
 3. Update status to `in-progress`
-4. Regenerate `_tasks/_index-pending.md`
+4. Regenerate `_tasks/_index-pending.md` (escape `|` in wikilinks as `\|` inside table cells)
 5. Begin work session
 
 ## Notes

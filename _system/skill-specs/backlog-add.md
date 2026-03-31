@@ -1,8 +1,8 @@
 ---
 skill: backlog-add
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-03-31
 depends_on: []
 ---
 
@@ -44,7 +44,7 @@ related_areas: []
 {{description}}
 ```
 
-4. **Update `_backlog/_index.md`**: regenerate from directory contents (see index format below)
+4. **Update `_backlog/_index.md`**: regenerate from directory contents. ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
 5. **Confirm**: "Added '{{title}}' to backlog."
 

@@ -1,8 +1,8 @@
 ---
 skill: task-define
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-03-31
 depends_on: [backlog-add]
 ---
 
@@ -69,7 +69,7 @@ _Entries added during execution sessions._
    - Add `promoted_to: _tasks/YYYY-MM-DD-{{slug}}` to its frontmatter
    - Regenerate `_backlog/_index.md`
 
-5. **Update `_tasks/_index-pending.md`**: regenerate from directory contents (pending tasks only)
+5. **Update `_tasks/_index-pending.md`**: regenerate from directory contents (pending tasks only). ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
 6. **Confirm**: "Task '{{title}}' created. Due: {{due or 'no date'}}. Linked to: {{area or 'none'}}."
 
@@ -90,7 +90,7 @@ pending → in-progress → done
 When a task is finished:
 1. Update its frontmatter: `status: done`, add `completed: YYYY-MM-DD`
 2. Remove from `_tasks/_index-pending.md`
-3. Add to `_tasks/_index-done.md`
+3. Add to `_tasks/_index-done.md` (escape `|` in wikilinks as `\|` inside table cells)
 
 ## Notes
 
