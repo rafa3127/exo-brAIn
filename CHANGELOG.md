@@ -4,6 +4,13 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.3] - 2026-03-31
+
+### Changed
+- `area-create` skill v2: added classifying folders convention with 4 predefined folders (`work/`, `project/`, `knowledge/`, `university/`), decision rules for routing areas, and explicit antipattern for project-specific content in `knowledge/`
+- Area paths now must start with a classifying folder — prevents areas created at vault root
+- Added sub-area guidance note
+
 ## [0.4.2] - 2026-03-31
 
 ### Fixed
