@@ -94,3 +94,4 @@ When installed via `_system/skill-specs/install-skills.md`, these grouped skills
 - `_index.md` files are auto-generated — never edit manually
 - Knowledge areas are created only via the `area-create` spec
 - Cross-references in user content body: use Obsidian `[[wikilinks]]` (e.g., `[[knowledge/typescript]]`, `[[_captures/2026-03-26]]`). Frontmatter values remain plain strings.
+- Wikilinks inside markdown tables: always escape the alias pipe → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.

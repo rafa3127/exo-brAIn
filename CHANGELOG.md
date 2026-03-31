@@ -4,6 +4,13 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.2] - 2026-03-31
+
+### Fixed
+- Wikilinks inside markdown tables now require escaped alias pipe (`\|`) to prevent broken Obsidian rendering
+- Added global convention to `CLAUDE.md` Conventions section
+- Added escape instructions to `task-define` v2, `task-list` v2, `backlog-add` v2, `backlog-review` v2, and `update-doc` v4 — every point where `_index` tables with wikilinks are generated
+
 ## [0.4.1] - 2026-03-28
 
 ### Changed

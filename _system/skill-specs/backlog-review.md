@@ -1,8 +1,8 @@
 ---
 skill: backlog-review
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-03-31
 depends_on: [backlog-add]
 ---
 
@@ -33,7 +33,7 @@ List and review backlog items. Helps the user decide which ideas to refine, disc
    - **Define**: chain to `task-define` skill → moves item to `_tasks/`
    - **Discard**: update status to `discarded`, add a `discarded_reason` line
 
-4. **After any status change**: update the item's frontmatter and regenerate `_backlog/_index.md`
+4. **After any status change**: update the item's frontmatter and regenerate `_backlog/_index.md` (escape `|` in wikilinks as `\|` inside table cells)
 
 5. **If backlog is empty**: inform user and suggest checking `_captures/` for ideas that could be promoted
 

@@ -1,8 +1,8 @@
 ---
 skill: update-doc
 audience: ai
-version: 3
-last_updated: 2026-03-26
+version: 4
+last_updated: 2026-03-31
 ---
 
 # Skill: update-doc
@@ -69,6 +69,7 @@ area: [area path]
 ### `index`
 - **Pattern**: Auto-regenerate entirely from directory contents
 - **Never** edit `_index.md` manually — always regenerate
+- ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
 ### `backlog-item`
 - **Pattern**: Replace content + update status in frontmatter
