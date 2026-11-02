@@ -131,6 +131,13 @@ expect("env", bash("env"), false);
 expect("printenv EXO_BRAIN_MODE", bash("printenv EXO_BRAIN_MODE"), true);
 expect("printenv (all)", bash("printenv"), false);
 expect("printenv other var", bash("printenv GITHUB_TOKEN"), false);
+expect("printenv EXO_BRAIN_NOTIFY_URL", bash("printenv EXO_BRAIN_NOTIFY_URL"), true);
+expect("printenv both vars", bash("printenv EXO_BRAIN_MODE EXO_BRAIN_NOTIFY_URL"), false);
+expect("printenv notify url chained", bash("printenv EXO_BRAIN_NOTIFY_URL; env"), false);
+expect("env", bash("env"), false);
+expect("echo $EXO_BRAIN_NOTIFY_URL", bash("echo $EXO_BRAIN_NOTIFY_URL"), false);
+expect("echo \"$EXO_BRAIN_NOTIFY_URL\"", bash('echo "$EXO_BRAIN_NOTIFY_URL"'), false);
+expect("test -n notify url", bash('test -n "$EXO_BRAIN_NOTIFY_URL"'), false);
 
 console.log("\n— Bash: chaining / substitution");
 expect("&& chain", bash("git status && rm -rf ."), false);

@@ -23,6 +23,8 @@ const RE_TASK = /^_tasks\/(?!_index)[^/]+\.md$/;
 const RE_BACKLOG = /^_backlog\/(?!_index)[^/]+\.md$/;
 const RE_CAPTURE = /^_captures\/(\d{4}-\d{2}-\d{2})\.md$/;
 const INDEXES = new Set(["_tasks/_index-pending.md", "_backlog/_index.md"]);
+// Not secrets: the bridge token lives in the network secret, never in the environment.
+const PRINTENV_VARS = new Set(["EXO_BRAIN_MODE", "EXO_BRAIN_NOTIFY_URL"]);
 
 const ymd = (d) => d.toISOString().slice(0, 10);
 // "Today" depends on the user's timezone; accept UTC yesterday/today/tomorrow.
@@ -196,7 +198,7 @@ export function checkBash(root, cmd, env) {
   if (t.error) return t.error;
   const [prog, ...args] = t.tokens;
   if (!prog) return "empty command";
-  if (prog === "printenv") return args.length === 1 && args[0] === "EXO_BRAIN_MODE" ? null : "only `printenv EXO_BRAIN_MODE` is allowed";
+  if (prog === "printenv") return args.length === 1 && PRINTENV_VARS.has(args[0]) ? null : "only `printenv EXO_BRAIN_MODE` and `printenv EXO_BRAIN_NOTIFY_URL` are allowed";
   if (prog === "git") return checkGit(root, args, env);
   if (prog === "curl") return checkCurl(args, env);
   if (READ_CMDS.has(prog)) {
