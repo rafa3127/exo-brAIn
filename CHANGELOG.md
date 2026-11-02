@@ -4,7 +4,7 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.5.0] - 2026-11-02
 
 ### Added
 - `_system/scripts/build-skills.mjs` — deterministic Node build that generates the 6 grouped skills into `.claude/skills/<name>/SKILL.md` (project skills, committed) and `dist/skills/<name>.zip` (upload packages, gitignored). Validates description length (≤1024 chars); uses bsdtar on Windows and `zip` on macOS/Linux
