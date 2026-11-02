@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: instruction
-version: 4
-last_updated: 2026-03-26
+version: 5
+last_updated: 2026-11-02
 ---
 
 # exo-brAIn — Interactive Setup
@@ -100,29 +100,30 @@ If not:
 
 ### Local REST API
 1. Settings → Community Plugins → Browse → search "Local REST API" → Install → Enable
-2. Note the **port** (default: 27123)
-3. Generate an **API key** in the plugin settings
+2. Defaults: **HTTPS on port 27124** (self-signed certificate). The insecure HTTP server (27123) is disabled by default — leave it off.
+3. The plugin generates an **API key** on first enable (visible in its settings)
 
-**Ask:** "What port is the REST API running on? Please paste the API key here — I'll need it to configure the MCP connection in Step 5."
+**If you have filesystem access**, don't ask the user for the key: read `.obsidian/plugins/obsidian-local-rest-api/data.json` (gitignored) — it contains `apiKey`, `port` and `enableInsecureServer`. Otherwise **ask:** "Please paste the API key from the Local REST API settings — I'll need it to configure the MCP connection in Step 5."
 
-> **Important:** Store the API key and port in memory for Step 5. You will need them to configure the MCP bridge.
+> **Important:** Keep the API key and port for Step 5. Never write the key into a tracked file.
 
 ---
 
 ## Step 4 — Configure the Vault
 
-Read `_system/config.json` and help the user fill in real values:
+Read `_system/config.json` (if it doesn't exist, create it from `_system/config.template.json`) and help the user fill in real values:
 
 ```json
 {
   "vault": {
     "name": "Their vault name",
     "path": "/full/path/to/vault",
+    "paths": ["/full/path/to/vault", "C:/Users/me/Desktop/vault"],
     "github": "user/repo-name"
   },
   "mcp": {
-    "port": 27123,
-    "protocol": "http"
+    "port": 27124,
+    "protocol": "https"
   },
   "paths": {
     "sessions": "_system/sessions",
@@ -146,9 +147,10 @@ Read `_system/config.json` and help the user fill in real values:
 
 **Gather from user:**
 - What do they want to call their brain? (name)
-- Where is it on disk? (path — help them find it if needed)
+- Where is it on disk? (path — help them find it if needed; use forward slashes on Windows)
+- Will they clone it on other machines? Add each machine's path to `vault.paths` — the installed skills are shared across machines via the claude.ai account and use this list to find the vault
 - What's their GitHub user/repo?
-- What port did the REST API report? (usually 27123)
+- REST API port/protocol (from Step 3; default 27124 / https)
 
 Write the updated `_system/config.json`.
 
@@ -164,50 +166,61 @@ If yes:
 
 ### 5a — Install mcp-obsidian
 
+Install `uv` if missing:
+- macOS / Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- Windows: `winget install astral-sh.uv`
+
+Then install the server as a persistent tool:
+
 ```bash
 uv tool install mcp-obsidian
 ```
 
-Locate the binary path for the next step:
-```bash
-which uvx
-```
+> **Don't use `uvx mcp-obsidian` as the MCP command.** On first launch `uvx` downloads Python and dependencies, which exceeds the client's ~30 s startup timeout and the server shows as failed. `uv tool install` does that once, up front.
+
+The executable lands in `~/.local/bin/`: `mcp-obsidian` (macOS/Linux) or `mcp-obsidian.exe` (Windows, e.g. `C:/Users/<you>/.local/bin/mcp-obsidian.exe`). Confirm with `uv tool dir --bin`. Use this **absolute path** as `command` below.
 
 ### 5b — Configure the MCP connection
 
 Use the API key and port obtained from Step 3. **Execute the configuration yourself** — do not just show the user what to do.
 
-**For Claude Code CLI**, add the MCP server to `~/.claude/settings.json` under the `mcpServers` key:
+Server definition (same for every client):
 
 ```json
 {
-  "mcpServers": {
-    "obsidian": {
-      "command": "uvx",
-      "args": ["mcp-obsidian"],
-      "env": {
-        "OBSIDIAN_API_KEY": "{{API_KEY_FROM_STEP_3}}",
-        "OBSIDIAN_HOST": "127.0.0.1",
-        "OBSIDIAN_PORT": "{{PORT_FROM_STEP_3}}"
-      }
-    }
+  "type": "stdio",
+  "command": "{{ABSOLUTE_PATH_TO_mcp-obsidian}}",
+  "args": [],
+  "env": {
+    "OBSIDIAN_API_KEY": "{{API_KEY_FROM_STEP_3}}",
+    "OBSIDIAN_HOST": "127.0.0.1",
+    "OBSIDIAN_PORT": "27124",
+    "OBSIDIAN_PROTOCOL": "https"
   }
 }
 ```
 
-> If `uvx` is not found at runtime, use the absolute path from `which uvx` (e.g., `/Users/name/.local/bin/uvx`).
+**For Claude Code (CLI and Desktop Code tab)** — register it with the CLI (it is stored in `~/.claude.json`; Claude Code does **not** read `mcpServers` from `~/.claude/settings.json`):
 
-**For Claude Desktop / Cowork**, add the same server block to the Claude desktop config file at `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) under `mcpServers`.
+```bash
+claude mcp add-json obsidian --scope user '<the JSON above, on one line>'
+claude mcp list   # should show obsidian ✓ Connected (Obsidian must be open)
+```
 
-> **Note:** Claude Code CLI and Claude Desktop use **separate config files**. To have the MCP available in both, add it to both files.
+**For Claude Desktop (Chat / Cowork)** — add the same object under `mcpServers.obsidian` in `claude_desktop_config.json` (omit `"type"`), then fully restart Desktop:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows (Microsoft Store / MSIX install): `%LOCALAPPDATA%\Claude-Data\claude_*\claude_desktop_config.json`
+- Windows (classic installer): `%APPDATA%\Claude\claude_desktop_config.json`
+
+> **Note:** Claude Code and Claude Desktop use **separate configs**. To have the MCP available in both, configure both. The config files contain the API key — never commit them.
 
 ### 5c — Install the exo-brAIn skills
 
-The vault includes an automated skill installer at `_system/skill-specs/install-skills.md`. This installs 6 skills that make vault operations available via `/slash-commands` across Claude Code, Desktop Chat, and Cowork.
+The vault includes a skill installer at `_system/skill-specs/install-skills.md`. It builds 6 skills that make vault operations available via `/slash-commands` on every Claude surface (Chat, Cowork, Claude Code).
 
 **Procedure:**
 1. Read `_system/skill-specs/install-skills.md`
-2. Follow it step by step — it will detect the platform, read the skill-specs from the vault, and install them to the correct location
+2. Follow it step by step — it runs `node _system/scripts/build-skills.mjs` (regenerates `.claude/skills/` and `dist/skills/*.zip`), then the user uploads the 6 ZIPs once in claude.ai → Customize → Skills. The account syncs them to Chat, Cowork and Claude Code
 
 The installed skills are:
 - `exo-brain` — main router and quickstart
@@ -274,4 +287,7 @@ You're ready to go. Start any session by telling me what you want to work on.
 | Git push fails | Check SSH keys: `ssh -T git@github.com` |
 | Claude Code doesn't see CLAUDE.md | Run `claude` from the vault root directory |
 | Plugin not found in Obsidian | Enable Community Plugins first in Settings |
-| `uvx` not found | Use absolute path or install with `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| `uv` not found | Install it: `curl -LsSf https://astral.sh/uv/install.sh \| sh` (macOS/Linux) or `winget install astral-sh.uv` (Windows) |
+| MCP server times out on startup | You're using `uvx` as the command — run `uv tool install mcp-obsidian` and point `command` to the absolute executable path |
+| MCP connects but requests fail | Check `OBSIDIAN_PORT`/`OBSIDIAN_PROTOCOL` match the plugin (`.obsidian/plugins/obsidian-local-rest-api/data.json`); default is 27124 + https |
+| Claude Code doesn't see the MCP | It must be added with `claude mcp add-json … --scope user`, not in `~/.claude/settings.json` |

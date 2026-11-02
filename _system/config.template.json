@@ -2,11 +2,12 @@
   "vault": {
     "name": "VAULT_NAME",
     "path": "VAULT_PATH",
+    "paths": [],
     "github": "GITHUB_USER/REPO_NAME"
   },
   "mcp": {
-    "port": 27123,
-    "protocol": "http"
+    "port": 27124,
+    "protocol": "https"
   },
   "paths": {
     "sessions": "_system/sessions",
