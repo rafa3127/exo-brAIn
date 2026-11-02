@@ -1,8 +1,8 @@
 ---
 audience: human
 doc_type: instruction
-version: 2
-last_updated: 2026-03-27
+version: 3
+last_updated: 2026-11-02
 ---
 
 # exo-brAIn 🧠
@@ -14,7 +14,7 @@ An AI-assisted personal knowledge system built on Obsidian. Your AI handles sess
 A **template vault** that turns Obsidian into a structured external brain. It works with any AI assistant that can read files, with first-class support for:
 
 - **Claude Code** (CLI) — zero-config, just `cd` into the vault and run `claude`
-- **claude.ai** (web/app) — via MCP connector to Obsidian
+- **Claude Desktop** (Chat / Cowork) and **claude.ai** — via skills installed in your claude.ai account, plus the Obsidian MCP bridge on Desktop
 - **Any other AI** — reads plain markdown procedures, no vendor lock-in
 
 ## Quick Start (5 minutes)
@@ -69,8 +69,8 @@ In Obsidian → Settings → Community Plugins → Browse:
 - Pull on startup: ON
 
 **Configure Local REST API:**
-- Note the port (default: 27123)
-- Generate an API key → save it somewhere safe
+- Defaults are fine: HTTPS on port 27124 (leave the insecure HTTP server off)
+- The API key is shown in the plugin settings — your AI can read it from `.obsidian/plugins/obsidian-local-rest-api/data.json` (gitignored) during setup
 
 ### 4. Connect your AI
 
@@ -83,21 +83,32 @@ claude
 
 That's it. Claude reads `CLAUDE.md` automatically and guides you through the rest.
 
-#### claude.ai (web/app)
+#### Claude Desktop (Chat / Cowork)
 
-1. Install the MCP bridge:
+1. Install the MCP bridge (needs [uv](https://docs.astral.sh/uv/) — Windows: `winget install astral-sh.uv`):
    ```bash
-   pip install mcp-obsidian
-   # or: uv tool install mcp-obsidian
+   uv tool install mcp-obsidian
    ```
-2. Connect mcp-obsidian in claude.ai (Settings → Connected apps)
-3. Start a conversation and say: **"Read CLAUDE.md from my Obsidian vault and help me set up my exo-brAIn"**
+2. Add it to `claude_desktop_config.json` with the absolute path to the `mcp-obsidian` executable — see [`_system/quickstart.md`](_system/quickstart.md) Step 5b for the exact JSON and file locations (macOS and Windows)
+3. Restart Desktop, start a conversation and say: **"Read CLAUDE.md from my Obsidian vault and help me set up my exo-brAIn"**
+
+> Easiest path: run the setup from Claude Code first — it configures the MCP for both Code and Desktop and builds the skills for you.
 
 #### Other AI tools
 
 Open `CLAUDE.md` in your vault and paste its contents to your AI, or point your AI to `_system/quickstart.md`.
 
-### 5. Let the AI guide you
+### 5. Install the skills (all Claude surfaces)
+
+The quickstart does this for you (Step 5c), or ask your AI: **"Install the exo-brain skills"**. It runs:
+
+```bash
+node _system/scripts/build-skills.mjs
+```
+
+which builds 6 skills into `.claude/skills/` (used by Claude Code inside the vault) and `dist/skills/*.zip`. Upload the 6 ZIPs once in **claude.ai → Customize → Skills** — your account then syncs them to Chat (web, Desktop, mobile), Cowork and Claude Code. Re-run the build and re-upload after editing any skill-spec. Details: [`_system/skill-specs/install-skills.md`](_system/skill-specs/install-skills.md).
+
+### 6. Let the AI guide you
 
 Once connected, your AI will:
 1. Detect this is a new vault (config has placeholder values)
@@ -142,10 +153,12 @@ Obsidian Git auto-syncs to GitHub
 ```
 vault/
 ├── CLAUDE.md                  ← AI entry point (auto-loads in Claude Code)
+├── .claude/skills/            ← generated project skills (build-skills.mjs)
 ├── _system/
 │   ├── config.json            ← your vault settings (gitignored)
 │   ├── quickstart.md          ← interactive AI-guided setup
-│   ├── skill-specs/           ← all AI procedures (13 skills)
+│   ├── skill-specs/           ← all AI procedures (14 specs)
+│   ├── scripts/               ← build-skills.mjs (packages specs into Claude skills)
 │   ├── roles/                 ← your AI personas
 │   ├── templates/             ← area creation templates
 │   └── sessions/              ← session logs (gitignored)

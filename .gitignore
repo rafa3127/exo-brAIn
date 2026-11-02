@@ -18,3 +18,6 @@ _system/sessions/
 
 # OS files
 .DS_Store
+
+# Built skill packages (regenerate with node _system/scripts/build-skills.mjs)
+dist/

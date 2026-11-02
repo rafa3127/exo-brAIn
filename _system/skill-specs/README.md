@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: index
-version: 5
-last_updated: 2026-03-28
+version: 6
+last_updated: 2026-11-02
 ---
 
 # Skill Specs
@@ -11,13 +11,13 @@ Portable, AI-agnostic procedures for managing your exo-brAIn. Each file describe
 
 These are **specifications**, not code. Any AI with access to the vault can read and follow them.
 
-## Grouped Skills (Claude Desktop)
+## Grouped Skills (all Claude surfaces)
 
-When installed via `install-skills.md`, the specs are grouped into 6 skills available as `/slash-commands`. Each group embeds the full content of its specs for instant access.
+When installed via `install-skills.md` (build with `_system/scripts/build-skills.mjs`, upload to the claude.ai account), the specs are grouped into 6 skills available as `/slash-commands` in Chat, Cowork and Claude Code. Each group embeds the full content of its specs for instant access.
 
 | Installed skill | Contains | Description |
 |---|---|---|
-| `exo-brain` | quickstart, install-skills, review-contribution, this index | Main router, vault setup, and maintenance |
+| `exo-brain` | this index, quickstart, review-contribution (install-skills is read from the vault) | Main router, vault setup, and maintenance |
 | `exo-brain-sessions` | session-boot, session-end, load-context | Start/end sessions, load files on demand |
 | `exo-brain-roles` | role-load, role-save | List, load, create, edit AI personas |
 | `exo-brain-knowledge` | area-create, update-doc | Knowledge areas and documentation |
@@ -41,7 +41,7 @@ When installed via `install-skills.md`, the specs are grouped into 6 skills avai
 | backlog-add | `backlog-add.md` | Write | Add an idea to the backlog for future refinement |
 | backlog-review | `backlog-review.md` | Read | List and triage backlog items |
 | daily-capture | `daily-capture.md` | Write | Quickly append ideas/notes to today's capture file |
-| install-skills | `install-skills.md` | Write | Install the skill suite into the AI platform |
+| install-skills | `install-skills.md` | Write | Build the skill suite and upload it to the claude.ai account |
 
 ## How to Use
 

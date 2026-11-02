@@ -4,6 +4,28 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.0] - 2026-11-02
+
+### Added
+- `_system/scripts/build-skills.mjs` — deterministic Node build that generates the 6 grouped skills into `.claude/skills/<name>/SKILL.md` (project skills, committed) and `dist/skills/<name>.zip` (upload packages, gitignored). Validates description length (≤1024 chars); uses bsdtar on Windows and `zip` on macOS/Linux
+- `.claude/skills/` — generated project skills, so Claude Code (local and cloud sessions) gets the short `/exo-brain-*` names inside the vault
+- `vault.paths` in `config.template.json` — vault location on every machine where it is cloned; embedded in the generated skills
+
+### Changed
+- `install-skills.md` v6: the claude.ai account (Customize → Skills) is now the single source of truth for every surface — Chat, Cowork and Claude Code (via account sync, `/anthropic-skills:exo-brain-*`). The installer builds ZIPs and the user uploads them; it no longer writes to `~/.claude/skills/` or to the Desktop `skills-plugin` cache (old Option A/B are obsolete)
+- Generated skills no longer hardcode a vault path: they resolve it via cwd/Cowork folder → known clones from `config.json` → Obsidian MCP → ask the user
+- `exo-brain` router embeds the full quickstart and treats a missing `config.json` like `"VAULT_NAME"`
+- `config.template.json`: MCP defaults now `27124` / `https` (Local REST API plugin defaults)
+- `skill-specs/README.md` v6, `CLAUDE.md`: grouped-skills section applies to all Claude surfaces, not only Desktop
+- `claude-ai-skill/README.md` v4 and root `README.md` v3: installation section describes the build + upload flow
+
+### Fixed
+- Quickstart v5, Step 5 (MCP): Claude Code registration uses `claude mcp add-json obsidian --scope user` (Claude Code does not read `mcpServers` from `~/.claude/settings.json`); added Windows paths for `claude_desktop_config.json`; port/protocol `27124`/`https` with `OBSIDIAN_PROTOCOL`; API key/port read from the plugin's `data.json` instead of asking; `uv tool install` + absolute executable path instead of `uvx` (first-run download exceeded the ~30 s MCP startup timeout); `winget install astral-sh.uv` for Windows
+- Root README: removed the claude.ai "Connected apps" instruction for mcp-obsidian (a local stdio server can't be connected there)
+
+### Removed
+- `_system/claude-ai-skill/skill-definition.md` — legacy monolithic skill; its `exo-brain` name collided with the router
+
 ## [0.4.3] - 2026-03-31
 
 ### Changed

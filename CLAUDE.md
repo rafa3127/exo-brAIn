@@ -52,13 +52,13 @@ Run `git status` to confirm the repo is clean and on the `main` branch. If there
 
 Read the spec BEFORE performing the operation. Follow the documented procedure.
 
-### Installed skills (Claude Desktop)
+### Installed skills (all Claude surfaces)
 
-When installed via `_system/skill-specs/install-skills.md`, these grouped skills become available as `/slash-commands`:
+When installed via `_system/skill-specs/install-skills.md` (built by `_system/scripts/build-skills.mjs`, uploaded to the claude.ai account), these grouped skills become available as `/slash-commands` in Chat, Cowork and Claude Code:
 
 | Installed skill | Includes | Specs |
 |---|---|---|
-| `exo-brain` | Router, setup, maintenance | `quickstart.md`, `install-skills.md`, `review-contribution.md`, `README.md` |
+| `exo-brain` | Router, setup, maintenance | `README.md`, `quickstart.md`, `review-contribution.md` (reads `install-skills.md` from the vault) |
 | `exo-brain-sessions` | Session lifecycle | `session-boot.md`, `session-end.md`, `load-context.md` |
 | `exo-brain-roles` | Persona management | `role-load.md`, `role-save.md` |
 | `exo-brain-knowledge` | Areas and documentation | `area-create.md`, `update-doc.md` |
