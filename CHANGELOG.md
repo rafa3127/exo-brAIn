@@ -4,7 +4,7 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.5.0] - 2026-11-02
+## [Unreleased]
 
 ### Added
 - `_system/scripts/build-skills.mjs` — deterministic Node build that generates the 6 grouped skills into `.claude/skills/<name>/SKILL.md` (project skills, committed) and `dist/skills/<name>.zip` (upload packages, gitignored). Validates description length (≤1024 chars); uses bsdtar on Windows and `zip` on macOS/Linux
@@ -15,6 +15,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `install-skills.md` v6: the claude.ai account (Customize → Skills) is now the single source of truth for every surface — Chat, Cowork and Claude Code (via account sync, `/anthropic-skills:exo-brain-*`). The installer builds ZIPs and the user uploads them; it no longer writes to `~/.claude/skills/` or to the Desktop `skills-plugin` cache (old Option A/B are obsolete)
 - Generated skills no longer hardcode a vault path: they resolve it via cwd/Cowork folder → known clones from `config.json` → Obsidian MCP → ask the user
 - `exo-brain` router embeds the full quickstart and treats a missing `config.json` like `"VAULT_NAME"`
+- `install-skills.md` now follows the skill-spec structure (`skill:` frontmatter, `Purpose` / `When to use` / `Procedure` sections)
 - `config.template.json`: MCP defaults now `27124` / `https` (Local REST API plugin defaults)
 - `skill-specs/README.md` v6, `CLAUDE.md`: grouped-skills section applies to all Claude surfaces, not only Desktop
 - `claude-ai-skill/README.md` v4 and root `README.md` v3: installation section describes the build + upload flow

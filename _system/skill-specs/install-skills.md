@@ -1,16 +1,25 @@
 ---
+skill: install-skills
 audience: ai
-doc_type: instruction
 version: 6
 last_updated: 2026-11-02
+depends_on: []
 ---
 
-# Install exo-brAIn Skills
+# Skill: install-skills
+
+## Purpose
 
 Installs the 6 exo-brAIn skills (specs embedded, no vault roundtrip at runtime) on every Claude surface.
 
 > **Read this full spec before executing any step.**
 > **Re-run after editing any skill-spec** so installed copies don't go stale.
+
+## When to use
+
+- First-time setup (quickstart Step 5c)
+- User says: "install the exo-brain skills", "reinstall/update skills"
+- After editing any file in `_system/skill-specs/` or `_system/quickstart.md`
 
 ## How distribution works (as of Nov 2026)
 
@@ -31,13 +40,15 @@ Consequences:
 
 ---
 
-## Step 1 — Check prerequisites
+## Procedure
+
+### Step 1 — Check prerequisites
 
 - Node.js available (`node --version`).
 - `_system/config.json` exists (gitignored). If missing, create it from `config.template.json` with this machine's `vault.path` (forward slashes on Windows).
 - `vault.paths` lists the vault path on **every** machine where it is cloned (e.g. `["C:/Users/me/Desktop/my-brain", "/Users/me/Desktop/my-brain"]`). Account skills are shared across machines, so add this machine's path if it is missing. `vault.path` is always included automatically. Optional: with no paths, the skills fall back to cwd → MCP → ask.
 
-## Step 2 — Build
+### Step 2 — Build
 
 From the vault root:
 
@@ -60,7 +71,7 @@ Grouping (edit the `SKILLS` array in the script to change it):
 | `exo-brain-tasks` | `task-define.md`, `task-list.md`, `backlog-add.md`, `backlog-review.md` |
 | `exo-brain-capture` | `daily-capture.md` |
 
-## Step 3 — Upload to the claude.ai account (user does this)
+### Step 3 — Upload to the claude.ai account (user does this)
 
 Tell the user, in their language:
 
@@ -72,13 +83,13 @@ Tell the user, in their language:
 
 If running in Cowork with `present_files`, you may present the ZIPs so the user can click "Copy to your skills" instead of uploading by hand.
 
-## Step 4 — Verify
+### Step 4 — Verify
 
 - Account/Desktop: in a new Chat or Cowork conversation type `/exo-brain` — 6 entries should autocomplete, none duplicated.
 - Claude Code: run `/skills`. Outside the vault the 6 appear under "claude.ai sync" as `anthropic-skills:exo-brain-*`; inside the vault the project copies also appear with the short name.
 - Optional cache check (Windows MSIX): `ls "$LOCALAPPDATA/Claude-Data"/*/local-agent-mode-sessions/skills-plugin/*/*/skills | grep exo-brain`
 
-## Step 5 — Report
+### Step 5 — Report
 
 ```
 ✅ exo-brAIn skills built (embedded mode)

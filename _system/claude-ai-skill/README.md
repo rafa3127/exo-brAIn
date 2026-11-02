@@ -47,5 +47,5 @@ The AI can still operate by reading `CLAUDE.md` from the vault root when running
 
 ## Legacy
 
-- The monolithic `skill-definition.md` that used to live here was removed in 0.5.0 (see git history). Do not upload it: it uses the name `exo-brain` and would collide with the router.
+- The monolithic `skill-definition.md` that used to live here has been removed (see git history). Do not upload it: it uses the name `exo-brain` and would collide with the router.
 - install-skills v5 and earlier wrote copies to `~/.claude/skills/` and into the Desktop `skills-plugin` folder. Both are obsolete; remove old copies with `rm -rf ~/.claude/skills/exo-brain*`.
