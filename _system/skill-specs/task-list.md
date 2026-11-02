@@ -1,8 +1,8 @@
 ---
 skill: task-list
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-02
 depends_on: [task-define]
 ---
 
@@ -21,9 +21,9 @@ Show the user their current tasks, optionally combined with today's captures and
 
 ## Procedure
 
-### Pending tasks view (default)
+### Active tasks view (default)
 
-1. **Read `_tasks/_index-pending.md`**
+1. **Read `_tasks/_index-pending.md`** — it lists active tasks (`pending` and `in-progress`)
 2. **Present as table**: title, status, due date, linked area
 3. **Highlight overdue** tasks (due date < today)
 4. **Sort by**: overdue first, then by due date (soonest first), then undated
@@ -36,7 +36,7 @@ Show the user their current tasks, optionally combined with today's captures and
 
 ### "Give me my day" (combined briefing)
 
-1. Read `_tasks/_index-pending.md` → pending tasks
+1. Read `_tasks/_index-pending.md` → active tasks (`pending` + `in-progress`)
 2. Read `_captures/YYYY-MM-DD.md` (today) → today's captures (if exists)
 3. Query calendar if available (Google Calendar via MCP) → today's events
 4. Present combined briefing:
@@ -48,14 +48,18 @@ Show the user their current tasks, optionally combined with today's captures and
 - 10:00 — Team standup
 - 14:00 — Client call
 
-### Pending tasks
-| Task | Due | Area |
-|------|-----|------|
-| ... | ... | ... |
+### Active tasks
+| Task | Status | Due | Area |
+|------|--------|-----|------|
+| ... | ... | ... | ... |
 
 ### Today's captures
 - HH:MM — [capture content]
 ```
+
+### Closing a task
+
+If the user finished or abandons a task, follow **Completing or cancelling a task** in `task-define`.
 
 ### Acting on a task
 
@@ -63,7 +67,7 @@ If user wants to work on a task:
 1. Read the full task file
 2. Load its `context_files` if specified
 3. Update status to `in-progress`
-4. Regenerate `_tasks/_index-pending.md` (escape `|` in wikilinks as `\|` inside table cells)
+4. Regenerate the task indexes following the **Task indexes** section of `task-define`. The active index includes `pending` **and** `in-progress`, so this task stays listed (now as `**in-progress**`)
 5. Begin work session
 
 ## Notes
@@ -72,3 +76,4 @@ If user wants to work on a task:
 - If no calendar MCP is available, skip that section silently
 - If no captures exist for today, skip that section
 - If no tasks exist, say so and suggest checking the backlog
+- If an index looks inconsistent with the task files (missing or duplicated tasks), regenerate both per `task-define` before presenting
