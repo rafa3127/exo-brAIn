@@ -1,7 +1,7 @@
 ---
 audience: shared
 doc_type: instruction
-version: 5
+version: 6
 last_updated: 2026-11-02
 ---
 
@@ -125,6 +125,10 @@ Read `_system/config.json` (if it doesn't exist, create it from `_system/config.
     "port": 27124,
     "protocol": "https"
   },
+  "sync": {
+    "autoPull": true,
+    "pullIntervalMinutes": 30
+  },
   "paths": {
     "sessions": "_system/sessions",
     "context": "_system/context",
@@ -151,8 +155,11 @@ Read `_system/config.json` (if it doesn't exist, create it from `_system/config.
 - Will they clone it on other machines? Add each machine's path to `vault.paths` — the installed skills are shared across machines via the claude.ai account and use this list to find the vault
 - What's their GitHub user/repo?
 - REST API port/protocol (from Step 3; default 27124 / https)
+- Sync: keep the defaults unless they object. With `sync.autoPull: true`, every Claude Code session started in the vault runs `_system/scripts/sync-check.mjs` (SessionStart hook in `.claude/settings.json`). If the last fetch is older than `pullIntervalMinutes`, it runs `git pull --ff-only`. It never stashes, merges or rebases. If the pull can't fast-forward (local changes, diverged history, no network), the skills tell the user and ask before continuing. Set `autoPull: false` to disable it.
 
 Write the updated `_system/config.json`.
+
+> **Cloud sessions** (`CLAUDE_CODE_REMOTE=true`) never have `config.json`, because it is gitignored. They use the template defaults and never run this quickstart. See `_system/remote/README.md`.
 
 ---
 

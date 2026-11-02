@@ -4,7 +4,9 @@ This vault is an AI-assisted external brain. Read this file and follow its proto
 
 ## First-Time Detection
 
-Read `_system/config.json`. Check the `vault.name` field:
+**Remote sessions first.** If `CLAUDE_CODE_REMOTE=true` (cloud session) or `EXO_BRAIN_MODE` is set (e.g. `inbox`), the vault **is configured** even though `_system/config.json` is missing (it is gitignored, so clones never have it). Use the defaults from `_system/config.template.json` for paths and conventions and **never run the quickstart** there. With `EXO_BRAIN_MODE=inbox`, follow only `_system/skill-specs/inbox.md` (skill `exo-brain-inbox`) and ignore the rest of this file's protocols.
+
+Otherwise, read `_system/config.json`. Check the `vault.name` field:
 
 - If it says `"VAULT_NAME"` → **this vault needs setup**. Do the following:
   1. Greet the user and explain you've detected a fresh exo-brAIn vault
@@ -64,6 +66,7 @@ When installed via `_system/skill-specs/install-skills.md` (built by `_system/sc
 | `exo-brain-knowledge` | Areas and documentation | `area-create.md`, `update-doc.md` |
 | `exo-brain-tasks` | Tasks and backlog | `task-define.md`, `task-list.md`, `backlog-add.md`, `backlog-review.md` |
 | `exo-brain-capture` | Quick daily notes | `daily-capture.md` |
+| `exo-brain-inbox` | Remote inbox (project-only, `EXO_BRAIN_MODE=inbox`) | `inbox.md`, `daily-capture.md`, `task-define.md`, `backlog-add.md` |
 
 ### Individual spec reference
 
@@ -83,6 +86,7 @@ When installed via `_system/skill-specs/install-skills.md` (built by `_system/sc
 | Review backlog | `_system/skill-specs/backlog-review.md` |
 | Quick capture | `_system/skill-specs/daily-capture.md` |
 | Install/update skills | `_system/skill-specs/install-skills.md` |
+| Remote inbox run (`EXO_BRAIN_MODE=inbox`) | `_system/skill-specs/inbox.md` |
 | Full skill index | `_system/skill-specs/README.md` |
 
 ## Conventions

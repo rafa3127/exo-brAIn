@@ -1,7 +1,7 @@
 ---
 skill: install-skills
 audience: ai
-version: 6
+version: 7
 last_updated: 2026-11-02
 depends_on: []
 ---
@@ -10,7 +10,7 @@ depends_on: []
 
 ## Purpose
 
-Installs the 6 exo-brAIn skills (specs embedded, no vault roundtrip at runtime) on every Claude surface.
+Installs the 6 exo-brAIn skills (specs embedded, no vault roundtrip at runtime) on every Claude surface, plus the project-only `exo-brain-inbox` skill used by the remote inbox (see `_system/remote/README.md`).
 
 > **Read this full spec before executing any step.**
 > **Re-run after editing any skill-spec** so installed copies don't go stale.
@@ -30,7 +30,7 @@ There is **one source of truth for all surfaces: the user's claude.ai account** 
 | claude.ai web / mobile / Desktop **Chat** | account | `exo-brain-*` |
 | Desktop **Cowork** | account (cached locally under `%LOCALAPPDATA%\Claude-Data\…\skills-plugin\` on Windows MSIX, `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` on macOS) | `exo-brain-*` |
 | **Claude Code** CLI + Desktop **Code** tab (signed in with claude.ai, v2.1.273+) | account, auto-synced to `~/.claude/skills/synced/` (read-only, refreshes ~every 10 min) | `/anthropic-skills:exo-brain-*` |
-| **Claude Code inside the vault** | project skills in `.claude/skills/` (committed) | `/exo-brain-*` (local wins the short name) |
+| **Claude Code inside the vault** (local and cloud sessions) | project skills in `.claude/skills/` (committed) | `/exo-brain-*` (local wins the short name) |
 
 Consequences:
 - **Do not** write to `~/.claude/skills/` — the account sync already covers Claude Code everywhere. A personal copy would just be a third copy that drifts.
@@ -58,7 +58,11 @@ node _system/scripts/build-skills.mjs
 
 This regenerates:
 - `.claude/skills/<name>/SKILL.md` — project skills (commit these)
-- `dist/skills/<name>.zip` — upload packages (gitignored). Each ZIP contains `<name>/SKILL.md`; folder name = skill name.
+- `dist/skills/<name>.zip` — upload packages (gitignored), **6 ZIPs**. Each ZIP contains `<name>/SKILL.md`; folder name = skill name.
+
+The 7th skill, `exo-brain-inbox`, is **project-only** (`accountZip: false` in the script): it is written to `.claude/skills/` for cloud runs of the remote inbox and gets **no ZIP**. Never upload it to the account. It only applies when `EXO_BRAIN_MODE=inbox`.
+
+Commit `.claude/settings.json` too. It registers the SessionStart sync check and the PreToolUse inbox guard, and both cloud sessions and local Claude Code load it from the repo.
 
 Grouping (edit the `SKILLS` array in the script to change it):
 
@@ -70,6 +74,7 @@ Grouping (edit the `SKILLS` array in the script to change it):
 | `exo-brain-knowledge` | `area-create.md`, `update-doc.md` |
 | `exo-brain-tasks` | `task-define.md`, `task-list.md`, `backlog-add.md`, `backlog-review.md` |
 | `exo-brain-capture` | `daily-capture.md` |
+| `exo-brain-inbox` (project-only) | `inbox.md`, `daily-capture.md`, `task-define.md`, `backlog-add.md` |
 
 ### Step 3 — Upload to the claude.ai account (user does this)
 
@@ -86,14 +91,15 @@ If running in Cowork with `present_files`, you may present the ZIPs so the user 
 ### Step 4 — Verify
 
 - Account/Desktop: in a new Chat or Cowork conversation type `/exo-brain` — 6 entries should autocomplete, none duplicated.
-- Claude Code: run `/skills`. Outside the vault the 6 appear under "claude.ai sync" as `anthropic-skills:exo-brain-*`; inside the vault the project copies also appear with the short name.
+- Claude Code: run `/skills`. Outside the vault the 6 appear under "claude.ai sync" as `anthropic-skills:exo-brain-*`; inside the vault the 7 project copies (including `exo-brain-inbox`) also appear with the short name.
+- Account content check (Claude Code): `~/.claude/skills/synced/<bucket>/exo-brain*/SKILL.md` must match `.claude/skills/<name>/SKILL.md`. If they differ, the account still has an old upload. There must be no `exo-brain-inbox` there.
 - Optional cache check (Windows MSIX): `ls "$LOCALAPPDATA/Claude-Data"/*/local-agent-mode-sessions/skills-plugin/*/*/skills | grep exo-brain`
 
 ### Step 5 — Report
 
 ```
 ✅ exo-brAIn skills built (embedded mode)
-📂 Project skills: .claude/skills/ (commit)
+📂 Project skills: .claude/skills/ (7, incl. project-only exo-brain-inbox — commit)
 📦 Upload packages: dist/skills/*.zip (6)
 ⏳ Pending (user): delete old exo-brain* in Customize > Skills, upload the 6 ZIPs, restart Desktop
 🔄 After editing any spec: re-run the build and re-upload

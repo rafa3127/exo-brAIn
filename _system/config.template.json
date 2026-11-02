@@ -9,6 +9,10 @@
     "port": 27124,
     "protocol": "https"
   },
+  "sync": {
+    "autoPull": true,
+    "pullIntervalMinutes": 30
+  },
   "paths": {
     "sessions": "_system/sessions",
     "context": "_system/context",

@@ -4,6 +4,23 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- **Remote inbox (restricted cloud agent)**: record notes, tasks and ideas from anywhere through a Claude Code scheduled task with an API trigger (`_system/remote/README.md`: architecture, cloud environment setup, scheduled task, bridge contract; `_system/remote/inbox-task-prompt.md`: exact saved prompt)
+- `inbox` skill-spec and project-only skill `exo-brain-inbox` (embeds inbox, daily-capture, task-define, backlog-add). Generated into `.claude/skills/` but **not** packaged as a ZIP for the account (`accountZip: false` in `build-skills.mjs`). Only applies with `EXO_BRAIN_MODE=inbox`
+- `_system/scripts/inbox-guard.mjs` — PreToolUse hook enforcing inbox mode. It allows writes only to new tasks/backlog items, today's capture and two indexes. It allowlists Bash (read-only commands, specific git commands, `printenv EXO_BRAIN_MODE`, the notify curl) and rejects chaining, pipes, redirection and substitution. On `git commit` it checks the staged files. All other tools are denied; it fails closed and is a no-op outside inbox mode. Tests: `inbox-guard.test.mjs` (116 cases)
+- `_system/scripts/sync-check.mjs` — SessionStart hook: `git pull --ff-only` when the last fetch is older than `sync.pullIntervalMinutes`. It never stashes, merges or rebases, always exits 0, and prints `exo-brain sync: …` as session context. Skipped in cloud sessions. Tests: `sync-check.test.mjs`
+- `.claude/settings.json` registering both hooks
+- Inbox payload **metadata header**: optional `key: value` lines (`reply_to`, `source`, `received_at`, `suggested_type`) up to the first blank line. They are never recorded as content, and unknown keys are ignored. `received_at` (ISO 8601 with offset) sets today and the base for relative dates in the user's timezone. `suggested_type` is a strong classification hint. `source` is recorded as provenance (`source: inbox/<source>`, `(voz)` on voice captures). The guard's UTC ±1 day capture window is covered by tests for offsets −12…+14 (`inbox` spec v2, remote README and prompt v2)
+- `sync` block in `config.template.json` (`autoPull`, `pullIntervalMinutes`)
+
+### Changed
+- Generated skills share two new header sections. **Configuration**: in cloud sessions or remote modes, a missing `config.json` means "configured" and template defaults are used; the quickstart never runs there. **Sync check**: on first use, use the hook's status or run `sync-check.mjs`; on `FAILED`, ask the user before continuing
+- `CLAUDE.md` First-Time Detection: remote sessions (`CLAUDE_CODE_REMOTE=true` or `EXO_BRAIN_MODE` set) count as configured without `config.json`; inbox mode follows only `inbox.md`
+- `exo-brain` router: inbox routing and cloud configuration rule
+- `install-skills` v7, `skill-specs/README` v7, `claude-ai-skill/README` v5, root `README` v4, `quickstart` v6: document the 7th project-only skill, `.claude/settings.json`, the sync check and the remote inbox
+
 ## [0.5.0] - 2026-11-02
 
 ### Added

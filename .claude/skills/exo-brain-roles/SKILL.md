@@ -18,6 +18,20 @@ The vault root is the folder containing `CLAUDE.md` and `_system/skill-specs/`. 
 2. No filesystem access (e.g. Chat): use the Obsidian MCP tools below — their paths are already vault-relative.
 3. Still nothing: ask the user where the vault is.
 
+## Configuration
+
+Read `_system/config.json`. It is gitignored, so it is **absent in cloud sessions** (`CLAUDE_CODE_REMOTE=true`) and in remote modes (`EXO_BRAIN_MODE` set). In that case the vault **is configured**: use the defaults from `_system/config.template.json` for paths and conventions, and **never** run the quickstart.
+
+## Sync check
+
+On the **first** use of any exo-brain skill in a session, make sure the vault is up to date before reading it:
+
+1. If the session context already contains a line `exo-brain sync: …` (from the SessionStart hook), use that status.
+2. Otherwise, if you have a shell and the vault is a git repo (and not `CLAUDE_CODE_REMOTE=true`): run `node _system/scripts/sync-check.mjs` from the vault root and use its output line.
+3. No shell or no git (e.g. Chat via MCP): skip silently.
+
+If the status is `FAILED: <reason>`: tell the user the reason and ask whether to continue without the latest changes. **Do not continue until they answer.** `up-to-date`, `pulled N commits` and `skipped (…)` need no action (mention pulled commits briefly).
+
 ## Conventions
 - Boilerplate: English. Session content: user's language.
 - Temporal files: YYYY-MM-DD-slug.md

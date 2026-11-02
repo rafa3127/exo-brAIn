@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// Builds the 6 exo-brAIn skills from _system/skill-specs/ (embedded mode).
+// Builds the exo-brAIn skills from _system/skill-specs/ (embedded mode).
 //
 // Output:
-//   .claude/skills/<name>/SKILL.md   -> project skills (Claude Code inside the vault)
-//   dist/skills/<name>.zip           -> upload to claude.ai (Customize > Skills)
+//   .claude/skills/<name>/SKILL.md   -> project skills (Claude Code inside the vault, incl. cloud sessions)
+//   dist/skills/<name>.zip           -> upload to claude.ai (Customize > Skills) — 6 skills;
+//                                       exo-brain-inbox is project-only (accountZip: false), no ZIP
 //
 // Usage (from vault root):  node _system/scripts/build-skills.mjs
 // Known clone paths come from _system/config.json: vault.paths (one per machine) + vault.path.
@@ -53,6 +54,20 @@ The vault root is the folder containing \`CLAUDE.md\` and \`_system/skill-specs/
 
 ${locationSteps.map((s, i) => `${i + 1}. ${s}`).join("\n")}
 
+## Configuration
+
+Read \`_system/config.json\`. It is gitignored, so it is **absent in cloud sessions** (\`CLAUDE_CODE_REMOTE=true\`) and in remote modes (\`EXO_BRAIN_MODE\` set). In that case the vault **is configured**: use the defaults from \`_system/config.template.json\` for paths and conventions, and **never** run the quickstart.
+
+## Sync check
+
+On the **first** use of any exo-brain skill in a session, make sure the vault is up to date before reading it:
+
+1. If the session context already contains a line \`exo-brain sync: …\` (from the SessionStart hook), use that status.
+2. Otherwise, if you have a shell and the vault is a git repo (and not \`CLAUDE_CODE_REMOTE=true\`): run \`node _system/scripts/sync-check.mjs\` from the vault root and use its output line.
+3. No shell or no git (e.g. Chat via MCP): skip silently.
+
+If the status is \`FAILED: <reason>\`: tell the user the reason and ask whether to continue without the latest changes. **Do not continue until they answer.** \`up-to-date\`, \`pulled N commits\` and \`skipped (…)\` need no action (mention pulled commits briefly).
+
 ## Conventions
 - Boilerplate: English. Session content: user's language.
 - Temporal files: YYYY-MM-DD-slug.md
@@ -84,7 +99,7 @@ const SKILLS = [
     body: () => [
       section(
         "Routing",
-        'On any vault query: read `_system/config.json`. If it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Otherwise route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.'
+        'On any vault query: if `EXO_BRAIN_MODE=inbox`, use `exo-brain-inbox` only. In a cloud session (`CLAUDE_CODE_REMOTE=true`) or with `EXO_BRAIN_MODE` set, the vault counts as configured even without `_system/config.json` (see Configuration above) — never run the Quickstart there. Otherwise read `_system/config.json`: if it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Then route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.'
       ),
       section("Routing Table (README)", spec("README.md")),
       section("Quickstart", read("_system/quickstart.md")),
@@ -130,6 +145,19 @@ const SKILLS = [
     description: `Quick note capture in the exo-brAIn vault. Trigger when the user wants to: capture a quick thought ("capture this", "quick note", "jot this down"), add to today's daily note ("daily note", "add to today's notes"), or save a fleeting idea without full task or backlog formality.`,
     body: () => [section("Daily Capture", spec("daily-capture.md"))],
   },
+  {
+    name: "exo-brain-inbox",
+    title: "Inbox (restricted remote mode)",
+    // Project-only: written to .claude/skills/ for cloud runs, never packaged for the claude.ai account.
+    accountZip: false,
+    description: `Restricted inbox mode for remote capture. ONLY applies when the environment variable EXO_BRAIN_MODE=inbox is set (a dedicated cloud scheduled task fired with a <routine-fire-payload>). Records the payload — a voice transcription or text — as new tasks, captures or backlog items in the exo-brAIn vault, commits and pushes. Never use it in interactive sessions or when EXO_BRAIN_MODE is not inbox; use exo-brain-capture or exo-brain-tasks instead.`,
+    body: () => [
+      section("Inbox", spec("inbox.md")),
+      section("Daily Capture", spec("daily-capture.md")),
+      section("Task Define", spec("task-define.md")),
+      section("Backlog Add", spec("backlog-add.md")),
+    ],
+  },
 ];
 
 const yamlFolded = (s) => {
@@ -159,6 +187,10 @@ for (const s of SKILLS) {
   // ZIP with the skill folder at the root: <name>/SKILL.md
   const zip = path.join(OUT_DIST, `${s.name}.zip`);
   fs.rmSync(zip, { force: true });
+  if (s.accountZip === false) {
+    console.log(`✔ ${s.name}  (${md.split("\n").length} lines)  -> project only (.claude/skills, no ZIP)`);
+    continue;
+  }
   if (process.platform === "win32") {
     execFileSync(path.join(process.env.SystemRoot || "C:\\Windows", "System32", "tar.exe"), ["-a", "-c", "-f", zip, "-C", OUT_SKILLS, s.name]);
   } else {
