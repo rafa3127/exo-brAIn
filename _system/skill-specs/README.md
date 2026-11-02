@@ -1,7 +1,7 @@
 ---
 audience: shared
 doc_type: index
-version: 6
+version: 7
 last_updated: 2026-11-02
 ---
 
@@ -23,6 +23,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 | `exo-brain-knowledge` | area-create, update-doc | Knowledge areas and documentation |
 | `exo-brain-tasks` | task-define, task-list, backlog-add, backlog-review | Define tasks, daily briefings, manage backlog |
 | `exo-brain-capture` | daily-capture | Quick append to today's daily note |
+| `exo-brain-inbox` *(project-only, not uploaded)* | inbox, daily-capture, task-define, backlog-add | Restricted remote inbox — only when `EXO_BRAIN_MODE=inbox` (see `_system/remote/README.md`) |
 
 ## Individual Specs
 
@@ -42,6 +43,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 | backlog-review | `backlog-review.md` | Read | List and triage backlog items |
 | daily-capture | `daily-capture.md` | Write | Quickly append ideas/notes to today's capture file |
 | install-skills | `install-skills.md` | Write | Build the skill suite and upload it to the claude.ai account |
+| inbox | `inbox.md` | Write | Record a remote payload as tasks/captures/backlog (restricted inbox mode only) |
 
 ## How to Use
 

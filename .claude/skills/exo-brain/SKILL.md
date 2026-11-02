@@ -20,6 +20,20 @@ The vault root is the folder containing `CLAUDE.md` and `_system/skill-specs/`. 
 2. No filesystem access (e.g. Chat): use the Obsidian MCP tools below — their paths are already vault-relative.
 3. Still nothing: ask the user where the vault is.
 
+## Configuration
+
+Read `_system/config.json`. It is gitignored, so it is **absent in cloud sessions** (`CLAUDE_CODE_REMOTE=true`) and in remote modes (`EXO_BRAIN_MODE` set). In that case the vault **is configured**: use the defaults from `_system/config.template.json` for paths and conventions, and **never** run the quickstart.
+
+## Sync check
+
+On the **first** use of any exo-brain skill in a session, make sure the vault is up to date before reading it:
+
+1. If the session context already contains a line `exo-brain sync: …` (from the SessionStart hook), use that status.
+2. Otherwise, if you have a shell and the vault is a git repo (and not `CLAUDE_CODE_REMOTE=true`): run `node _system/scripts/sync-check.mjs` from the vault root and use its output line.
+3. No shell or no git (e.g. Chat via MCP): skip silently.
+
+If the status is `FAILED: <reason>`: tell the user the reason and ask whether to continue without the latest changes. **Do not continue until they answer.** `up-to-date`, `pulled N commits` and `skipped (…)` need no action (mention pulled commits briefly).
+
 ## Conventions
 - Boilerplate: English. Session content: user's language.
 - Temporal files: YYYY-MM-DD-slug.md
@@ -42,7 +56,7 @@ If MCP is not available, use direct file access at the vault root.
 
 ## Routing
 
-On any vault query: read `_system/config.json`. If it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Otherwise route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.
+On any vault query: if `EXO_BRAIN_MODE=inbox`, use `exo-brain-inbox` only. In a cloud session (`CLAUDE_CODE_REMOTE=true`) or with `EXO_BRAIN_MODE` set, the vault counts as configured even without `_system/config.json` (see Configuration above) — never run the Quickstart there. Otherwise read `_system/config.json`: if it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Then route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.
 
 ---
 
@@ -51,7 +65,7 @@ On any vault query: read `_system/config.json`. If it is missing or `vault.name`
 ---
 audience: shared
 doc_type: index
-version: 6
+version: 7
 last_updated: 2026-11-02
 ---
 
@@ -73,6 +87,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 | `exo-brain-knowledge` | area-create, update-doc | Knowledge areas and documentation |
 | `exo-brain-tasks` | task-define, task-list, backlog-add, backlog-review | Define tasks, daily briefings, manage backlog |
 | `exo-brain-capture` | daily-capture | Quick append to today's daily note |
+| `exo-brain-inbox` *(project-only, not uploaded)* | inbox, daily-capture, task-define, backlog-add | Restricted remote inbox — only when `EXO_BRAIN_MODE=inbox` (see `_system/remote/README.md`) |
 
 ## Individual Specs
 
@@ -92,6 +107,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 | backlog-review | `backlog-review.md` | Read | List and triage backlog items |
 | daily-capture | `daily-capture.md` | Write | Quickly append ideas/notes to today's capture file |
 | install-skills | `install-skills.md` | Write | Build the skill suite and upload it to the claude.ai account |
+| inbox | `inbox.md` | Write | Record a remote payload as tasks/captures/backlog (restricted inbox mode only) |
 
 ## How to Use
 
@@ -115,7 +131,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 ---
 audience: shared
 doc_type: instruction
-version: 5
+version: 6
 last_updated: 2026-11-02
 ---
 
@@ -239,6 +255,10 @@ Read `_system/config.json` (if it doesn't exist, create it from `_system/config.
     "port": 27124,
     "protocol": "https"
   },
+  "sync": {
+    "autoPull": true,
+    "pullIntervalMinutes": 30
+  },
   "paths": {
     "sessions": "_system/sessions",
     "context": "_system/context",
@@ -265,8 +285,11 @@ Read `_system/config.json` (if it doesn't exist, create it from `_system/config.
 - Will they clone it on other machines? Add each machine's path to `vault.paths` — the installed skills are shared across machines via the claude.ai account and use this list to find the vault
 - What's their GitHub user/repo?
 - REST API port/protocol (from Step 3; default 27124 / https)
+- Sync: keep the defaults unless they object. With `sync.autoPull: true`, every Claude Code session started in the vault runs `_system/scripts/sync-check.mjs` (SessionStart hook in `.claude/settings.json`). If the last fetch is older than `pullIntervalMinutes`, it runs `git pull --ff-only`. It never stashes, merges or rebases. If the pull can't fast-forward (local changes, diverged history, no network), the skills tell the user and ask before continuing. Set `autoPull: false` to disable it.
 
 Write the updated `_system/config.json`.
+
+> **Cloud sessions** (`CLAUDE_CODE_REMOTE=true`) never have `config.json`, because it is gitignored. They use the template defaults and never run this quickstart. See `_system/remote/README.md`.
 
 ---
 

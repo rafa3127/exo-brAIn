@@ -1,7 +1,7 @@
 ---
 audience: human
 doc_type: instruction
-version: 3
+version: 4
 last_updated: 2026-11-02
 ---
 
@@ -106,7 +106,7 @@ The quickstart does this for you (Step 5c), or ask your AI: **"Install the exo-b
 node _system/scripts/build-skills.mjs
 ```
 
-which builds 6 skills into `.claude/skills/` (used by Claude Code inside the vault) and `dist/skills/*.zip`. Upload the 6 ZIPs once in **claude.ai → Customize → Skills** — your account then syncs them to Chat (web, Desktop, mobile), Cowork and Claude Code. Re-run the build and re-upload after editing any skill-spec. Details: [`_system/skill-specs/install-skills.md`](_system/skill-specs/install-skills.md).
+which builds 6 skills into `.claude/skills/` (used by Claude Code inside the vault) and `dist/skills/*.zip`. Upload the 6 ZIPs once in **claude.ai → Customize → Skills** — your account then syncs them to Chat (web, Desktop, mobile), Cowork and Claude Code. Re-run the build and re-upload after editing any skill-spec. A 7th project-only skill, `exo-brain-inbox`, is generated for the optional remote inbox and is **not** uploaded. Details: [`_system/skill-specs/install-skills.md`](_system/skill-specs/install-skills.md).
 
 ### 6. Let the AI guide you
 
@@ -154,11 +154,13 @@ Obsidian Git auto-syncs to GitHub
 vault/
 ├── CLAUDE.md                  ← AI entry point (auto-loads in Claude Code)
 ├── .claude/skills/            ← generated project skills (build-skills.mjs)
+├── .claude/settings.json      ← hooks: sync check on session start, inbox guard
 ├── _system/
 │   ├── config.json            ← your vault settings (gitignored)
 │   ├── quickstart.md          ← interactive AI-guided setup
-│   ├── skill-specs/           ← all AI procedures (14 specs)
-│   ├── scripts/               ← build-skills.mjs (packages specs into Claude skills)
+│   ├── skill-specs/           ← all AI procedures (15 specs)
+│   ├── scripts/               ← build-skills, sync-check, inbox-guard (+ tests)
+│   ├── remote/                ← optional remote inbox (cloud capture) setup
 │   ├── roles/                 ← your AI personas
 │   ├── templates/             ← area creation templates
 │   └── sessions/              ← session logs (gitignored)
@@ -185,6 +187,11 @@ vault/
 | `backlog-review` | List and triage backlog items |
 | `task-define` | Convert a backlog item or idea into a defined task |
 | `task-list` | List pending tasks, daily briefing with calendar |
+| `inbox` | Record a remote message as tasks/captures/backlog (restricted cloud mode, see `_system/remote/`) |
+
+### Staying in sync
+
+When you start Claude Code in the vault, a SessionStart hook runs `_system/scripts/sync-check.mjs`. If the last fetch is older than `sync.pullIntervalMinutes` (default 30), it runs `git pull --ff-only`. It never stashes, merges or rebases. If the pull fails (local changes, diverged history, no network), the skills tell you why and ask before continuing. Turn it off with `"sync": {"autoPull": false}` in `_system/config.json`.
 
 ---
 

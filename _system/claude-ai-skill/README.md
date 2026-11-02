@@ -1,7 +1,7 @@
 ---
 audience: shared
 doc_type: instruction
-version: 4
+version: 5
 last_updated: 2026-11-02
 ---
 
@@ -33,6 +33,8 @@ After installation, these appear as `/exo-brain-*` commands in Claude (in Claude
 | `exo-brain-knowledge` | area-create, update-doc | Knowledge areas and documentation |
 | `exo-brain-tasks` | task-define, task-list, backlog-add, backlog-review | Define tasks, daily briefings, manage backlog |
 | `exo-brain-capture` | daily-capture | Quick append to today's daily note |
+
+The build also generates `exo-brain-inbox`, a **project-only** skill for the optional remote inbox (`_system/remote/README.md`). It has no ZIP. Don't upload it to the account.
 
 ## Updating skills
 
