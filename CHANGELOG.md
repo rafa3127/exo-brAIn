@@ -6,6 +6,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-02
+
 ### Added
 - **Remote inbox (restricted cloud agent)**: record notes, tasks and ideas from anywhere through a Claude Code scheduled task with an API trigger (`_system/remote/README.md`: architecture, cloud environment setup, scheduled task, bridge contract; `_system/remote/inbox-task-prompt.md`: exact saved prompt)
 - `inbox` skill-spec and project-only skill `exo-brain-inbox` (embeds inbox, daily-capture, task-define, backlog-add). Generated into `.claude/skills/` but **not** packaged as a ZIP for the account (`accountZip: false` in `build-skills.mjs`). Only applies with `EXO_BRAIN_MODE=inbox`
