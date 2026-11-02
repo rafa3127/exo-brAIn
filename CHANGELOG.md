@@ -21,6 +21,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `claude-ai-skill/README.md` v4 and root `README.md` v3: installation section describes the build + upload flow
 
 ### Fixed
+- Task indexes dropped `in-progress` tasks: `task-define` regenerated `_index-pending.md` with "pending tasks only", and `task-list` inherited that rule right after setting a task to `in-progress`, leaving it in no index. The active index now explicitly includes `pending` + `in-progress` (`task-define` v3, `task-list` v3, `update-doc` v5)
+- Duplicate rows and missing dates in `_index-done.md`: closing a task now sets `status` + `completed` (also for `cancelled`) and regenerates **both** indexes in full from frontmatter instead of moving rows by hand
+- `task-define` declares the canonical format of both task indexes (frontmatter, columns, sort order, empty state, self-check) and task frontmatter rules (lifecycle keys must be top-level scalars; `"null"` treated as null) so regenerations are consistent across agents. Regeneration repairs lifecycle keys nested inside another value (e.g. `completed:` inside a `due: |-` block) without changing values
 - Quickstart v5, Step 5 (MCP): Claude Code registration uses `claude mcp add-json obsidian --scope user` (Claude Code does not read `mcpServers` from `~/.claude/settings.json`); added Windows paths for `claude_desktop_config.json`; port/protocol `27124`/`https` with `OBSIDIAN_PROTOCOL`; API key/port read from the plugin's `data.json` instead of asking; `uv tool install` + absolute executable path instead of `uvx` (first-run download exceeded the ~30 s MCP startup timeout); `winget install astral-sh.uv` for Windows
 - Root README: removed the claude.ai "Connected apps" instruction for mcp-obsidian (a local stdio server can't be connected there)
 

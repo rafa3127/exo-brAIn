@@ -190,8 +190,8 @@ last_updated: YYYY-MM-DD
 ---
 skill: update-doc
 audience: ai
-version: 4
-last_updated: 2026-03-31
+version: 5
+last_updated: 2026-11-02
 ---
 
 # Skill: update-doc
@@ -269,7 +269,8 @@ area: [area path]
 ### `task`
 - **Pattern**: Append to work log + update status in frontmatter
 - **Status values**: `pending` → `in-progress` → `done` / `cancelled`
-- **On complete**: set `status: done`, add `completed: YYYY-MM-DD`, move entry from `_tasks/_index-pending.md` to `_tasks/_index-done.md`
+- **On complete / cancel**: follow **Completing or cancelling a task** in `task-define` (set `status` + `completed: YYYY-MM-DD`, then regenerate both task indexes; never move rows by hand)
+- **On any status change** (e.g. → `in-progress`): regenerate both task indexes per `task-define`; `in-progress` tasks stay in `_index-pending.md`
 
 ### `note`
 - **Pattern**: Flexible — append, edit, or replace as needed
