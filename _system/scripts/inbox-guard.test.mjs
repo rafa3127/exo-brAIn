@@ -73,6 +73,33 @@ write(`_captures/${TODAY}.md`);
 expect("Edit (append) today's capture", tool("Edit", { file_path: abs(`_captures/${TODAY}.md`) }), true);
 expect("Write (overwrite) today's capture", tool("Write", { file_path: abs(`_captures/${TODAY}.md`) }), false);
 
+console.log("\n— capture date from received_at (user offset) vs the VM's UTC clock");
+// The skill takes "today" from received_at in its own offset; the guard checks UTC ±1 day.
+const capAt = (receivedAt, runDelayMin = 2) => {
+  const local = receivedAt.slice(0, 10);                                   // date in the user's offset
+  const now = new Date(Date.parse(receivedAt) + runDelayMin * 60000);      // VM clock (UTC) when the run writes
+  return { input: tool("Edit", { file_path: abs(`_captures/${local}.md`) }), now }; // append
+
+};
+for (const [label, at, allowed] of [
+  ["-05:00 evening (UTC already next day)", "2026-11-02T20:15:00-05:00", true],
+  ["-12:00 late night (UTC +1 day)", "2026-11-02T23:30:00-12:00", true],
+  ["+14:00 just after midnight (UTC -1 day)", "2026-11-04T00:30:00+14:00", true],
+  ["+05:30 morning", "2026-11-03T08:00:00+05:30", true],
+  ["UTC exactly midnight", "2026-11-03T00:00:00+00:00", true],
+]) {
+  const { input, now } = capAt(at);
+  const reason = decide(input, env, now);
+  const ok = allowed ? reason === null : reason !== null;
+  ok ? pass++ : fail++;
+  console.log(`${ok ? "✔" : "✗"} ${allowed ? "ALLOW" : "DENY "} capture for ${at.slice(0, 10)} — received_at ${at}${reason ? `  — ${reason}` : ""}`);
+}
+{
+  const reason = decide(tool("Write", { file_path: abs("_captures/2026-10-31.md") }), env, new Date("2026-11-03T01:17:00Z"));
+  const ok = reason !== null; ok ? pass++ : fail++;
+  console.log(`${ok ? "✔" : "✗"} DENY  capture 2+ days away from the run's clock${reason ? `  — ${reason}` : ""}`);
+}
+
 console.log("\n— other tools");
 expect("Read inside vault", tool("Read", { file_path: abs("knowledge/area/_index.md") }), true);
 expect("Grep without path", tool("Grep", { pattern: "x" }), true);
