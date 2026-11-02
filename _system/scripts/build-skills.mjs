@@ -24,9 +24,13 @@ const spec = (f) => read(`_system/skill-specs/${f}`);
 // Every machine where this vault is cloned. Skills synced via claude.ai are
 // shared across machines, so they must not hardcode a single path.
 let vault = {};
-try {
-  vault = JSON.parse(read("_system/config.json"))?.vault ?? {};
-} catch {}
+if (fs.existsSync(path.join(ROOT, "_system", "config.json"))) {
+  try {
+    vault = JSON.parse(read("_system/config.json"))?.vault ?? {};
+  } catch (e) {
+    console.warn(`⚠ _system/config.json is not valid JSON (${e.message}) — building without known vault paths`);
+  }
+}
 const norm = (p) => p.replace(/\\/g, "/").replace(/\/+$/, "").toLowerCase();
 const paths = [];
 for (const p of [...(Array.isArray(vault.paths) ? vault.paths : []), vault.path]) {
