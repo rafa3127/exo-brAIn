@@ -1,8 +1,8 @@
 ---
 skill: backlog-add
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 depends_on: []
 ---
 
@@ -46,13 +46,16 @@ related_areas: []
 
 4. **Update `_backlog/_index.md`**: regenerate from directory contents. ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
-5. **Confirm**: "Added '{{title}}' to backlog."
+5. **If sourced from an existing capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
+
+6. **Confirm**: "Added '{{title}}' to backlog."
 
 ## Status values
 
 - `raw` — just captured, not yet explored
 - `exploring` — being discussed or refined
 - `defined` — ready to become a task (use `task-define` skill)
+- `promoted` — already converted; `promoted_to` says where (keep file for record)
 - `discarded` — decided not to pursue (keep file for record)
 
 ## Notes

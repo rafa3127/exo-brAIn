@@ -1,8 +1,8 @@
 ---
 skill: daily-capture
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-11-03
 depends_on: []
 ---
 
@@ -10,7 +10,7 @@ depends_on: []
 
 ## Purpose
 
-Quickly append ideas, notes, or reminders to today's daily capture file. Captures are append-only, timestamped entries in a single file per day.
+Quickly append ideas, notes, or reminders to today's daily capture file. Captures are timestamped entries in a single file per day. They are append-only, except for the conversion mark added when an entry is resolved.
 
 ## When to use
 
@@ -50,9 +50,27 @@ date: YYYY-MM-DD
 
 6. **Confirm** briefly: "Captured." — no verbose confirmation needed.
 
+## Conversion marks
+
+When a capture is resolved, add a mark at the very end of its line, after any tags, so nobody has to re-read it or search the vault to find out what happened to it.
+
+| Mark | Meaning |
+|------|---------|
+| `→ [[path/to/destination]]` | Became a task, backlog item, knowledge note or area. Several destinations: `→ [[a]], [[b]]` |
+| `→ done` | Already resolved, with no destination file |
+| `→ discarded` | Decided not to pursue |
+
+An optional `(YYYY-MM-DD)` may follow the mark. The markers themselves stay in English because agents parse them.
+
+Only the **end of the line** counts: entries often contain `→` in their text (`Caracas → CDMX`). To list the entries still unresolved in a file, without opening any destination:
+
+```bash
+grep -E '^\*\*' _captures/YYYY-MM-DD.md | grep -vE '→ (\[\[.*\]\]|done|discarded)( \([0-9-]+\))?\s*$'
+```
+
 ## Notes
 
-- Never edit past entries — append only
+- Never edit past entries, except to add a conversion mark at the end of the line
 - No `_index.md` for captures — file date is the index
 - Keep entries short. The user is capturing, not writing documentation
 - If the user provides multiple items at once, create one entry per item with the same timestamp

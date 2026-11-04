@@ -1,9 +1,9 @@
 ---
 skill: task-define
 audience: ai
-version: 3
-last_updated: 2026-11-02
-depends_on: [backlog-add]
+version: 4
+last_updated: 2026-11-03
+depends_on: [backlog-add, daily-capture]
 ---
 
 # Skill: task-define
@@ -23,6 +23,7 @@ Convert a backlog item (or a new idea) into a fully defined task with scope, dat
 
 1. **Source the idea**:
    - If from backlog: read the backlog item file for context
+   - If from a capture: read that capture's line
    - If new: gather description from user
 
 2. **Refine with user** — ask for (or infer):
@@ -65,9 +66,11 @@ _Entries added during execution sessions._
 ```
 
 4. **If sourced from backlog**:
-   - Update backlog item status to `defined`
+   - Update backlog item status to `promoted`
    - Add `promoted_to: _tasks/YYYY-MM-DD-{{slug}}` to its frontmatter
    - Regenerate `_backlog/_index.md`
+
+   **If sourced from a capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
 
 5. **Regenerate the task indexes** following [Task indexes](#task-indexes) below. The active index includes `pending` **and** `in-progress` tasks.
 

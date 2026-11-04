@@ -56,8 +56,8 @@ If MCP is not available, use direct file access at the vault root.
 ---
 skill: area-create
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 ---
 
 # Skill: area-create
@@ -192,6 +192,7 @@ last_updated: YYYY-MM-DD
 
 ## Notes
 
+- If the area comes from an existing capture, append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures)
 - Empty directories don't show in Obsidian. Create subdirectories only when the first file goes in.
 - Sub-areas (e.g., `work/client-portal/auth-module`) use this same skill with the full path.
 - The structure is a starting point. Skills like `update-doc` can create additional files as needed.
@@ -204,8 +205,8 @@ last_updated: YYYY-MM-DD
 ---
 skill: update-doc
 audience: ai
-version: 5
-last_updated: 2026-11-02
+version: 6
+last_updated: 2026-11-03
 ---
 
 # Skill: update-doc
@@ -276,8 +277,8 @@ area: [area path]
 
 ### `backlog-item`
 - **Pattern**: Replace content + update status in frontmatter
-- **Status values**: `raw` → `exploring` → `defined` → `discarded`
-- **On define**: add `promoted_to: _tasks/YYYY-MM-DD-slug` to frontmatter
+- **Status values**: `raw` → `exploring` → `defined` → `promoted` / `discarded`
+- **On promote**: set `status: promoted` and add `promoted_to:` with the destination path (e.g. `_tasks/YYYY-MM-DD-slug`) to frontmatter
 - **On discard**: add `discarded_reason` line
 
 ### `task`
@@ -309,7 +310,7 @@ Unrecognized `doc_type`:
 When generating or updating user content (tasks, backlog items, captures, area docs), use Obsidian `[[wikilinks]]` in the **document body** to link related files:
 - Tasks → `[[knowledge/typescript]]`, `[[_backlog/idea-slug]]`
 - Backlog items → `[[_captures/2026-03-26]]`
-- Captures → `[[_backlog/idea-slug]]` when promoting to backlog
+- Captures → a conversion mark at the end of the entry's line when it is resolved: `→ [[_backlog/idea-slug]]` (any destination), `→ done` or `→ discarded`. This is the only edit allowed on past captures
 
 **Frontmatter values remain plain strings** (e.g., `area: knowledge/typescript`, not `area: [[knowledge/typescript]]`). Wikilinks are for human navigation in Obsidian; frontmatter is for programmatic access.
 
