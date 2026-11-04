@@ -60,7 +60,7 @@ When installed via `_system/skill-specs/install-skills.md` (built by `_system/sc
 
 | Installed skill | Includes | Specs |
 |---|---|---|
-| `exo-brain` | Router, setup, maintenance | `README.md`, `quickstart.md`, `review-contribution.md` (reads `install-skills.md` from the vault) |
+| `exo-brain` | Router, setup, maintenance | `README.md`, `quickstart.md`, `template-update.md`, `review-contribution.md` (reads `install-skills.md` from the vault) |
 | `exo-brain-sessions` | Session lifecycle | `session-boot.md`, `session-end.md`, `load-context.md` |
 | `exo-brain-roles` | Persona management | `role-load.md`, `role-save.md` |
 | `exo-brain-knowledge` | Areas and documentation | `area-create.md`, `update-doc.md` |
@@ -86,6 +86,7 @@ When installed via `_system/skill-specs/install-skills.md` (built by `_system/sc
 | Review backlog | `_system/skill-specs/backlog-review.md` |
 | Quick capture | `_system/skill-specs/daily-capture.md` |
 | Install/update skills | `_system/skill-specs/install-skills.md` |
+| Update to a new exo-brAIn release | `_system/skill-specs/template-update.md` |
 | Remote inbox run (`EXO_BRAIN_MODE=inbox`) | `_system/skill-specs/inbox.md` |
 | Full skill index | `_system/skill-specs/README.md` |
 
