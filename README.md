@@ -144,7 +144,7 @@ Obsidian Git auto-syncs to GitHub
 | **Skill-specs** | Markdown procedures the AI follows. Portable across tools. |
 | **Sessions** | Work periods with automatic logging and context tracking. |
 | **Cross-cutting** | Knowledge areas available for consultation from other areas. |
-| **Captures** | Quick daily notes — append-only, one file per day. |
+| **Captures** | Quick daily notes, one file per day. Append-only, except for a mark at the end of the line once an entry is resolved. |
 | **Backlog** | Raw ideas saved for future refinement or promotion to tasks. |
 | **Tasks** | Defined, actionable work items linked to knowledge areas. |
 

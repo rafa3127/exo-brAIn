@@ -1,8 +1,8 @@
 ---
 skill: backlog-review
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 depends_on: [backlog-add]
 ---
 
@@ -26,7 +26,7 @@ List and review backlog items. Helps the user decide which ideas to refine, disc
 2. **If user wants overview**: present a summary table:
    - Title, status, created date, related areas
    - Group by status: `raw` first, then `exploring`, then `defined`
-   - Omit `discarded` unless user asks
+   - Omit `discarded` and `promoted` unless user asks
 
 3. **If user wants to act on an item**, offer options:
    - **Explore**: read the full file and discuss it → update status to `exploring`
@@ -35,7 +35,7 @@ List and review backlog items. Helps the user decide which ideas to refine, disc
 
 4. **After any status change**: update the item's frontmatter and regenerate `_backlog/_index.md` (escape `|` in wikilinks as `\|` inside table cells)
 
-5. **If backlog is empty**: inform user and suggest checking `_captures/` for ideas that could be promoted
+5. **If backlog is empty**: inform user and suggest checking `_captures/` for ideas that could be promoted, skipping entries that already end in a conversion mark (`→ [[...]]`, `→ done`, `→ discarded`)
 
 ## Notes
 

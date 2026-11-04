@@ -6,6 +6,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- **Capture conversion marks**: a resolved capture ends in `→ [[destination]]`, `→ done` or `→ discarded`, so nobody has to re-read it or search the vault. `task-define`, `backlog-add`, `area-create` and `update-doc` add the mark, and `task-list` and `backlog-review` skip marked entries. Inbox mode is unchanged: it only creates entries
+- Backlog status `promoted`: separates items already converted from `defined` items that are ready to convert. `backlog-review` omits them
+
+### Changed
+- `daily-capture` v2: captures stay append-only, except for the conversion mark
+- `task-define` now sets a backlog item to `promoted` instead of `defined`. Items already converted can be migrated by changing the status of those with `promoted_to`
+
 ## [0.6.0] - 2026-11-02
 
 ### Added

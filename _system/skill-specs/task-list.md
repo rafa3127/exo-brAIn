@@ -1,8 +1,8 @@
 ---
 skill: task-list
 audience: ai
-version: 3
-last_updated: 2026-11-02
+version: 4
+last_updated: 2026-11-03
 depends_on: [task-define]
 ---
 
@@ -37,7 +37,7 @@ Show the user their current tasks, optionally combined with today's captures and
 ### "Give me my day" (combined briefing)
 
 1. Read `_tasks/_index-pending.md` → active tasks (`pending` + `in-progress`)
-2. Read `_captures/YYYY-MM-DD.md` (today) → today's captures (if exists)
+2. Read `_captures/YYYY-MM-DD.md` (today) → today's captures (if exists). Skip entries that end in a conversion mark (`→ [[...]]`, `→ done`, `→ discarded`), without opening their destinations
 3. Query calendar if available (Google Calendar via MCP) → today's events
 4. Present combined briefing:
 

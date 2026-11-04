@@ -191,8 +191,8 @@ End the run with the same summary (items recorded, commit hash, branch pushed, a
 ---
 skill: daily-capture
 audience: ai
-version: 1
-last_updated: 2026-03-26
+version: 2
+last_updated: 2026-11-03
 depends_on: []
 ---
 
@@ -200,7 +200,7 @@ depends_on: []
 
 ## Purpose
 
-Quickly append ideas, notes, or reminders to today's daily capture file. Captures are append-only, timestamped entries in a single file per day.
+Quickly append ideas, notes, or reminders to today's daily capture file. Captures are timestamped entries in a single file per day. They are append-only, except for the conversion mark added when an entry is resolved.
 
 ## When to use
 
@@ -240,9 +240,27 @@ date: YYYY-MM-DD
 
 6. **Confirm** briefly: "Captured." — no verbose confirmation needed.
 
+## Conversion marks
+
+When a capture is resolved, add a mark at the very end of its line, after any tags, so nobody has to re-read it or search the vault to find out what happened to it.
+
+| Mark | Meaning |
+|------|---------|
+| `→ [[path/to/destination]]` | Became a task, backlog item, knowledge note or area. Several destinations: `→ [[a]], [[b]]` |
+| `→ done` | Already resolved, with no destination file |
+| `→ discarded` | Decided not to pursue |
+
+An optional `(YYYY-MM-DD)` may follow the mark. The markers themselves stay in English because agents parse them.
+
+Only the **end of the line** counts: entries often contain `→` in their text (`Caracas → CDMX`). To list the entries still unresolved in a file, without opening any destination:
+
+```bash
+grep -E '^\*\*' _captures/YYYY-MM-DD.md | grep -vE '→ (\[\[.*\]\]|done|discarded)( \([0-9-]+\))?\s*$'
+```
+
 ## Notes
 
-- Never edit past entries — append only
+- Never edit past entries, except to add a conversion mark at the end of the line
 - No `_index.md` for captures — file date is the index
 - Keep entries short. The user is capturing, not writing documentation
 - If the user provides multiple items at once, create one entry per item with the same timestamp
@@ -254,9 +272,9 @@ date: YYYY-MM-DD
 ---
 skill: task-define
 audience: ai
-version: 3
-last_updated: 2026-11-02
-depends_on: [backlog-add]
+version: 4
+last_updated: 2026-11-03
+depends_on: [backlog-add, daily-capture]
 ---
 
 # Skill: task-define
@@ -276,6 +294,7 @@ Convert a backlog item (or a new idea) into a fully defined task with scope, dat
 
 1. **Source the idea**:
    - If from backlog: read the backlog item file for context
+   - If from a capture: read that capture's line
    - If new: gather description from user
 
 2. **Refine with user** — ask for (or infer):
@@ -318,9 +337,11 @@ _Entries added during execution sessions._
 ```
 
 4. **If sourced from backlog**:
-   - Update backlog item status to `defined`
+   - Update backlog item status to `promoted`
    - Add `promoted_to: _tasks/YYYY-MM-DD-{{slug}}` to its frontmatter
    - Regenerate `_backlog/_index.md`
+
+   **If sourced from a capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
 
 5. **Regenerate the task indexes** following [Task indexes](#task-indexes) below. The active index includes `pending` **and** `in-progress` tasks.
 
@@ -419,8 +440,8 @@ Includes `done` and `cancelled` tasks. Sorted by completed date desc.
 ---
 skill: backlog-add
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 depends_on: []
 ---
 
@@ -464,13 +485,16 @@ related_areas: []
 
 4. **Update `_backlog/_index.md`**: regenerate from directory contents. ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
-5. **Confirm**: "Added '{{title}}' to backlog."
+5. **If sourced from an existing capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
+
+6. **Confirm**: "Added '{{title}}' to backlog."
 
 ## Status values
 
 - `raw` — just captured, not yet explored
 - `exploring` — being discussed or refined
 - `defined` — ready to become a task (use `task-define` skill)
+- `promoted` — already converted; `promoted_to` says where (keep file for record)
 - `discarded` — decided not to pursue (keep file for record)
 
 ## Notes

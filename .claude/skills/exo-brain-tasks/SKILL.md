@@ -58,9 +58,9 @@ If MCP is not available, use direct file access at the vault root.
 ---
 skill: task-define
 audience: ai
-version: 3
-last_updated: 2026-11-02
-depends_on: [backlog-add]
+version: 4
+last_updated: 2026-11-03
+depends_on: [backlog-add, daily-capture]
 ---
 
 # Skill: task-define
@@ -80,6 +80,7 @@ Convert a backlog item (or a new idea) into a fully defined task with scope, dat
 
 1. **Source the idea**:
    - If from backlog: read the backlog item file for context
+   - If from a capture: read that capture's line
    - If new: gather description from user
 
 2. **Refine with user** — ask for (or infer):
@@ -122,9 +123,11 @@ _Entries added during execution sessions._
 ```
 
 4. **If sourced from backlog**:
-   - Update backlog item status to `defined`
+   - Update backlog item status to `promoted`
    - Add `promoted_to: _tasks/YYYY-MM-DD-{{slug}}` to its frontmatter
    - Regenerate `_backlog/_index.md`
+
+   **If sourced from a capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
 
 5. **Regenerate the task indexes** following [Task indexes](#task-indexes) below. The active index includes `pending` **and** `in-progress` tasks.
 
@@ -223,8 +226,8 @@ Includes `done` and `cancelled` tasks. Sorted by completed date desc.
 ---
 skill: task-list
 audience: ai
-version: 3
-last_updated: 2026-11-02
+version: 4
+last_updated: 2026-11-03
 depends_on: [task-define]
 ---
 
@@ -259,7 +262,7 @@ Show the user their current tasks, optionally combined with today's captures and
 ### "Give me my day" (combined briefing)
 
 1. Read `_tasks/_index-pending.md` → active tasks (`pending` + `in-progress`)
-2. Read `_captures/YYYY-MM-DD.md` (today) → today's captures (if exists)
+2. Read `_captures/YYYY-MM-DD.md` (today) → today's captures (if exists). Skip entries that end in a conversion mark (`→ [[...]]`, `→ done`, `→ discarded`), without opening their destinations
 3. Query calendar if available (Google Calendar via MCP) → today's events
 4. Present combined briefing:
 
@@ -307,8 +310,8 @@ If user wants to work on a task:
 ---
 skill: backlog-add
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 depends_on: []
 ---
 
@@ -352,13 +355,16 @@ related_areas: []
 
 4. **Update `_backlog/_index.md`**: regenerate from directory contents. ⚠️ Wikilinks inside markdown tables: always escape the alias pipe as `\|` → `[[path\|display name]]`. Unescaped `|` breaks Obsidian table rendering.
 
-5. **Confirm**: "Added '{{title}}' to backlog."
+5. **If sourced from an existing capture**: append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures).
+
+6. **Confirm**: "Added '{{title}}' to backlog."
 
 ## Status values
 
 - `raw` — just captured, not yet explored
 - `exploring` — being discussed or refined
 - `defined` — ready to become a task (use `task-define` skill)
+- `promoted` — already converted; `promoted_to` says where (keep file for record)
 - `discarded` — decided not to pursue (keep file for record)
 
 ## Notes
@@ -374,8 +380,8 @@ related_areas: []
 ---
 skill: backlog-review
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 depends_on: [backlog-add]
 ---
 
@@ -399,7 +405,7 @@ List and review backlog items. Helps the user decide which ideas to refine, disc
 2. **If user wants overview**: present a summary table:
    - Title, status, created date, related areas
    - Group by status: `raw` first, then `exploring`, then `defined`
-   - Omit `discarded` unless user asks
+   - Omit `discarded` and `promoted` unless user asks
 
 3. **If user wants to act on an item**, offer options:
    - **Explore**: read the full file and discuss it → update status to `exploring`
@@ -408,7 +414,7 @@ List and review backlog items. Helps the user decide which ideas to refine, disc
 
 4. **After any status change**: update the item's frontmatter and regenerate `_backlog/_index.md` (escape `|` in wikilinks as `\|` inside table cells)
 
-5. **If backlog is empty**: inform user and suggest checking `_captures/` for ideas that could be promoted
+5. **If backlog is empty**: inform user and suggest checking `_captures/` for ideas that could be promoted, skipping entries that already end in a conversion mark (`→ [[...]]`, `→ done`, `→ discarded`)
 
 ## Notes
 

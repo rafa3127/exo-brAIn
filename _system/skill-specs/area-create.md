@@ -1,8 +1,8 @@
 ---
 skill: area-create
 audience: ai
-version: 2
-last_updated: 2026-03-31
+version: 3
+last_updated: 2026-11-03
 ---
 
 # Skill: area-create
@@ -137,6 +137,7 @@ last_updated: YYYY-MM-DD
 
 ## Notes
 
+- If the area comes from an existing capture, append ` → [[<new file path>]]` to the end of that capture's line, after any tags (the only edit allowed on past captures)
 - Empty directories don't show in Obsidian. Create subdirectories only when the first file goes in.
 - Sub-areas (e.g., `work/client-portal/auth-module`) use this same skill with the full path.
 - The structure is a starting point. Skills like `update-doc` can create additional files as needed.
