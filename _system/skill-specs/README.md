@@ -1,8 +1,8 @@
 ---
 audience: shared
 doc_type: index
-version: 7
-last_updated: 2026-11-02
+version: 8
+last_updated: 2026-11-04
 ---
 
 # Skill Specs
@@ -17,7 +17,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 
 | Installed skill | Contains | Description |
 |---|---|---|
-| `exo-brain` | this index, quickstart, review-contribution (install-skills is read from the vault) | Main router, vault setup, and maintenance |
+| `exo-brain` | this index, quickstart, template-update, review-contribution (install-skills is read from the vault) | Main router, vault setup, and maintenance |
 | `exo-brain-sessions` | session-boot, session-end, load-context | Start/end sessions, load files on demand |
 | `exo-brain-roles` | role-load, role-save | List, load, create, edit AI personas |
 | `exo-brain-knowledge` | area-create, update-doc | Knowledge areas and documentation |
@@ -43,6 +43,7 @@ When installed via `install-skills.md` (build with `_system/scripts/build-skills
 | backlog-review | `backlog-review.md` | Read | List and triage backlog items |
 | daily-capture | `daily-capture.md` | Write | Quickly append ideas/notes to today's capture file |
 | install-skills | `install-skills.md` | Write | Build the skill suite and upload it to the claude.ai account |
+| template-update | `template-update.md` | Write | Update the vault to a published exo-brAIn release |
 | inbox | `inbox.md` | Write | Record a remote payload as tasks/captures/backlog (restricted inbox mode only) |
 
 ## How to Use

@@ -95,14 +95,15 @@ const SKILLS = [
   {
     name: "exo-brain",
     title: "Main Router",
-    description: `Manages an AI-assisted exo-brAIn (external brain) in Obsidian. This is the main entry point. Trigger when the user mentions Obsidian, their vault, their notes, "exo-brain", "second brain", or wants to set up a new vault ("quickstart", "initialize vault", "set up obsidian"). Also triggers for general vault queries that don't match a more specific exo-brain-* skill, for reinstalling/updating the exo-brain skills, and for reviewing contribution PRs to the exo-brAIn template repo ("review this PR", "check this contribution").`,
+    description: `Manages an AI-assisted exo-brAIn (external brain) in Obsidian. This is the main entry point. Trigger when the user mentions Obsidian, their vault, their notes, "exo-brain", "second brain", or wants to set up a new vault ("quickstart", "initialize vault", "set up obsidian"). Also triggers for general vault queries that don't match a more specific exo-brain-* skill, for reinstalling/updating the exo-brain skills, for updating the vault to a new exo-brAIn release ("update exo-brain", "is there a new version?"), and for reviewing contribution PRs to the exo-brAIn template repo ("review this PR", "check this contribution").`,
     body: () => [
       section(
         "Routing",
-        'On any vault query: if `EXO_BRAIN_MODE=inbox`, use `exo-brain-inbox` only. In a cloud session (`CLAUDE_CODE_REMOTE=true`) or with `EXO_BRAIN_MODE` set, the vault counts as configured even without `_system/config.json` (see Configuration above) — never run the Quickstart there. Otherwise read `_system/config.json`: if it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Then route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.'
+        'On any vault query: if `EXO_BRAIN_MODE=inbox`, use `exo-brain-inbox` only. In a cloud session (`CLAUDE_CODE_REMOTE=true`) or with `EXO_BRAIN_MODE` set, the vault counts as configured even without `_system/config.json` (see Configuration above) — never run the Quickstart there. Otherwise read `_system/config.json`: if it is missing or `vault.name` is `"VAULT_NAME"`, follow the Quickstart below. Then route by intent to the matching `exo-brain-*` skill (sessions, roles, knowledge, tasks, capture), or handle directly. To update the vault to a new release, follow Template Update below. To reinstall/update skills, read `_system/skill-specs/install-skills.md` from the vault.'
       ),
       section("Routing Table (README)", spec("README.md")),
       section("Quickstart", read("_system/quickstart.md")),
+      section("Template Update", spec("template-update.md")),
       section("Review Contribution", spec("review-contribution.md")),
     ],
   },

@@ -91,7 +91,11 @@ Releases are managed by the maintainer. Contributors do **not** assign version n
 
 1. Contributors add their changes under `[Unreleased]` in `CHANGELOG.md`
 2. On merge, the maintainer decides whether to release immediately or accumulate changes
-3. To release: rename `[Unreleased]` → `[x.y.z] - YYYY-MM-DD`, commit, push, create a GitHub release with a matching tag
+3. To release: rename `[Unreleased]` → `[x.y.z] - YYYY-MM-DD`, set `_system/VERSION` to `x.y.z`, commit, push, create a GitHub release with a matching `vx.y.z` tag
+
+Publishing the tag is what ships a change: the `template-update` skill only offers tagged releases, so anything still under `[Unreleased]` stays out of users' vaults.
+
+**Migrations:** if a release needs more than file changes (editing existing notes, re-pasting a prompt into claude.ai), add a `### Migration` section to its changelog entry, with one concrete step per bullet. `template-update` runs them with the user's approval. Say so when a step is manual.
 
 **Versioning follows [semver](https://semver.org/):**
 - **Patch** (0.0.x): bug fixes, typos, small corrections
