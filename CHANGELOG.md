@@ -7,12 +7,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- **Task list from the remote inbox**: asking "what do I have pending this week?" by voice or text answers with the active tasks in the notification. It uses the same flow, with no new commands, reads only `_tasks/_index-pending.md`, and commits nothing when nothing was recorded (`inbox` spec v4, saved prompt v4)
 - **Capture conversion marks**: a resolved capture ends in `→ [[destination]]`, `→ done` or `→ discarded`, so nobody has to re-read it or search the vault. `task-define`, `backlog-add`, `area-create` and `update-doc` add the mark, and `task-list` and `backlog-review` skip marked entries. Inbox mode is unchanged: it only creates entries
 - Backlog status `promoted`: separates items already converted from `defined` items that are ready to convert. `backlog-review` omits them
 
 ### Changed
+- `inbox-guard.mjs`: notification text limit raised from 600 to 3500 characters, for the task list
 - `daily-capture` v2: captures stay append-only, except for the conversion mark
 - `task-define` now sets a backlog item to `promoted` instead of `defined`. Items already converted can be migrated by changing the status of those with `promoted_to`
+
+### Migration
+- Manual: paste the updated prompt from `_system/remote/inbox-task-prompt.md` into the inbox scheduled task on claude.ai. Until then it keeps recording these questions as captures
 
 ## [0.6.0] - 2026-11-02
 
