@@ -25,6 +25,8 @@ const RE_CAPTURE = /^_captures\/(\d{4}-\d{2}-\d{2})\.md$/;
 const INDEXES = new Set(["_tasks/_index-pending.md", "_backlog/_index.md"]);
 // Not secrets: the bridge token lives in the network secret, never in the environment.
 const PRINTENV_VARS = new Set(["EXO_BRAIN_MODE", "EXO_BRAIN_NOTIFY_URL"]);
+// Room for a task list, and still under the 4096 characters of a Telegram message.
+const MAX_NOTIFY_CHARS = 3500;
 
 const ymd = (d) => d.toISOString().slice(0, 10);
 // "Today" depends on the user's timezone; accept UTC yesterday/today/tomorrow.
@@ -189,7 +191,7 @@ function checkCurl(args, env) {
   try { body = JSON.parse(data); } catch { return "notify body must be JSON"; }
   const keys = Object.keys(body ?? {}).sort().join(",");
   if (keys !== "reply_to,text" || typeof body.reply_to !== "string" || typeof body.text !== "string") return 'notify body must be {"reply_to": "...", "text": "..."}';
-  if (body.text.length > 600) return "notify text too long";
+  if (body.text.length > MAX_NOTIFY_CHARS) return "notify text too long";
   return null;
 }
 
