@@ -151,7 +151,7 @@ const SKILLS = [
     title: "Inbox (restricted remote mode)",
     // Project-only: written to .claude/skills/ for cloud runs, never packaged for the claude.ai account.
     accountZip: false,
-    description: `Restricted inbox mode for remote capture. ONLY applies when the environment variable EXO_BRAIN_MODE=inbox is set (a dedicated cloud scheduled task fired with a <routine-fire-payload>). Records the payload — a voice transcription or text — as new tasks, captures or backlog items in the exo-brAIn vault, commits and pushes. Never use it in interactive sessions or when EXO_BRAIN_MODE is not inbox; use exo-brain-capture or exo-brain-tasks instead.`,
+    description: `Restricted inbox mode for remote capture. ONLY applies when the environment variable EXO_BRAIN_MODE=inbox is set (a dedicated cloud scheduled task fired with a <routine-fire-payload>). Records the payload — a voice transcription or text — as new tasks, captures or backlog items in the exo-brAIn vault, commits and pushes, and lists active tasks when the payload asks for them. Never use it in interactive sessions or when EXO_BRAIN_MODE is not inbox; use exo-brain-capture or exo-brain-tasks instead.`,
     body: () => [
       section("Inbox", spec("inbox.md")),
       section("Daily Capture", spec("daily-capture.md")),

