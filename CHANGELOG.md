@@ -4,7 +4,7 @@ All notable changes to the exo-brAIn template are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.7.0] - 2026-11-15
 
 ### Added
 - **Template updates**: `template-update` skill-spec and `_system/scripts/template-update.mjs`. It compares the vault with the published releases, explains what's new, asks, and applies the update on a branch, keeping personal edits. It only sees `vX.Y.Z` tags, never unreleased work, and works on vaults with no history in common with the template. Tests: `template-update.test.mjs`
